@@ -36,26 +36,29 @@ export default function ChallengesPage() {
           {challenges.map((challenge) => (
             <Card key={challenge.id} className="overflow-hidden">
               <CardContent className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">
-                      {challenge.title}
-                    </h3>
+                <div className="flex justify-between items-center mb-3">
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between">
+                      <h3 className="font-bold text-lg mb-1">
+                        {challenge.title}
+                      </h3>
+                      <Badge
+                        variant={
+                          challenge.difficulty === "Beginner"
+                            ? "secondary"
+                            : challenge.difficulty === "Intermediate"
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="ml-2 shrink-0"
+                      >
+                        {challenge.difficulty}
+                      </Badge>
+                    </div>
                     <p className="text-gray-600 text-sm mb-2">
                       {challenge.description}
                     </p>
                   </div>
-                  <Badge
-                    variant={
-                      challenge.difficulty === "Beginner"
-                        ? "secondary"
-                        : challenge.difficulty === "Intermediate"
-                        ? "default"
-                        : "destructive"
-                    }
-                  >
-                    {challenge.difficulty}
-                  </Badge>
                 </div>
 
                 <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
