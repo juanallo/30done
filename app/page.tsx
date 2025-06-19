@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -122,9 +123,15 @@ export default function FitnessApp() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900  to-slate-950 flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
       {/* Main illustration area */}
       <div className="mb-8 relative">
-        <div className="w-64 h-64 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mb-4">
-          <div className="text-6xl">🏃‍♀️</div>
-        </div>
+        {/* <div className="w-64 h-64 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mb-4"> */}
+          <Image
+            src="/logo.png"
+            alt="30done Logo"
+            width={240}
+            height={2400}
+            className="object-contain"
+          />
+        {/* </div> */}
       </div>
 
       <div className="text-center mb-8">
