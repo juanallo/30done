@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -161,17 +160,16 @@ export default function FitnessApp() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-between mb-6 pt-4">
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            className="btn btn-ghost btn-square"
             onClick={() => setCurrentScreen("welcome")}
           >
             <ArrowLeft className="h-6 w-6" />
-          </Button>
+          </button>
           <h1 className="text-2xl font-bold">Choose Challenge</h1>
-          <Button variant="ghost" size="icon">
+          <button className="btn btn-ghost btn-square">
             <Settings className="h-6 w-6" />
-          </Button>
+          </button>
         </div>
 
         <div className="space-y-4">
@@ -211,15 +209,15 @@ export default function FitnessApp() {
                   </div>
                 </div>
 
-                <Button
+                <button
                   onClick={() => {
                     setSelectedChallenge(challenge);
                     setCurrentScreen("dashboard");
                   }}
-                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  className="btn btn-primary w-full"
                 >
                   Start Challenge
-                </Button>
+                </button>
               </CardContent>
             </Card>
           ))}
@@ -234,13 +232,12 @@ export default function FitnessApp() {
         {/* Header */}
         <div className="bg-white p-4 rounded-b-3xl shadow-sm">
           <div className="flex items-center justify-between mb-4 pt-4">
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
+              className="btn btn-ghost btn-square"
               onClick={() => setCurrentScreen("challenges")}
             >
               <ArrowLeft className="h-6 w-6" />
-            </Button>
+            </button>
             <div className="flex items-center gap-2">
               <Bell className="h-6 w-6 text-gray-600" />
               <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
@@ -305,19 +302,19 @@ export default function FitnessApp() {
               )}
 
               <div className="flex gap-2">
-                <Button
+                <button
                   onClick={() => setCurrentScreen("workout")}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700"
+                  className="btn btn-primary flex-1"
                 >
                   <Play className="h-4 w-4 mr-2" />
                   Start Workout
-                </Button>
-                <Button
-                  variant="outline"
+                </button>
+                <button
+                  className="btn btn-ghost"
                   onClick={() => setCurrentScreen("progress")}
                 >
                   <Calendar className="h-4 w-4" />
-                </Button>
+                </button>
               </div>
             </CardContent>
           </Card>
@@ -328,14 +325,12 @@ export default function FitnessApp() {
               <CardContent className="p-4 text-center">
                 <Target className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                 <p className="font-semibold">View Progress</p>
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
+                  className="btn btn-ghost btn-sm mt-2"
                   onClick={() => setCurrentScreen("progress")}
-                  className="mt-2"
                 >
                   Open
-                </Button>
+                </button>
               </CardContent>
             </Card>
 
@@ -343,9 +338,9 @@ export default function FitnessApp() {
               <CardContent className="p-4 text-center">
                 <Bell className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                 <p className="font-semibold">Reminders</p>
-                <Button variant="ghost" size="sm" className="mt-2">
+                <button className="btn btn-ghost btn-sm mt-2">
                   Set Time
-                </Button>
+                </button>
               </CardContent>
             </Card>
           </div>
@@ -359,13 +354,12 @@ export default function FitnessApp() {
       <div className="max-w-md mx-auto">
         <div className="bg-white p-4 rounded-b-3xl shadow-sm">
           <div className="flex items-center justify-between mb-4 pt-4">
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
+              className="btn btn-ghost btn-square"
               onClick={() => setCurrentScreen("dashboard")}
             >
               <ArrowLeft className="h-6 w-6" />
-            </Button>
+            </button>
             <h1 className="text-xl font-bold">Day {currentDay} Workout</h1>
             <div></div>
           </div>
@@ -401,7 +395,7 @@ export default function FitnessApp() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button
+                  <button
                     onClick={() => {
                       markDayComplete(currentDay);
                       setCurrentDay((prev) =>
@@ -409,18 +403,17 @@ export default function FitnessApp() {
                       );
                       setCurrentScreen("dashboard");
                     }}
-                    className="w-full bg-green-600 hover:bg-green-700"
+                    className="btn btn-success w-full"
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Mark as Complete
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
+                  </button>
+                  <button
+                    className="btn btn-outline w-full"
                     onClick={() => setCurrentScreen("dashboard")}
                   >
                     Skip for Today
-                  </Button>
+                  </button>
                 </div>
               </CardContent>
             </Card>
@@ -443,13 +436,12 @@ export default function FitnessApp() {
         <div className="max-w-md mx-auto">
           <div className="bg-white p-4 rounded-b-3xl shadow-sm">
             <div className="flex items-center justify-between mb-4 pt-4">
-              <Button
-                variant="ghost"
-                size="icon"
+              <button
+                className="btn btn-ghost btn-square"
                 onClick={() => setCurrentScreen("dashboard")}
               >
                 <ArrowLeft className="h-6 w-6" />
-              </Button>
+              </button>
               <h1 className="text-xl font-bold">Progress Tracker</h1>
               <div></div>
             </div>
