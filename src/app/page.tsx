@@ -12,6 +12,22 @@ export default function Home() {
           height={38}
           priority
         />
+        
+        {/* daisyUI Test Components */}
+        <div className="flex flex-col gap-4 items-center">
+          <h2 className="text-2xl font-bold">daisyUI Components Test</h2>
+          <div className="card w-96 bg-base-100 shadow-xl">
+            <div className="card-body">
+              <h2 className="card-title">daisyUI Card!</h2>
+              <p>This card is styled with daisyUI classes. If you can see this styled card, daisyUI is working correctly!</p>
+              <div className="card-actions justify-end">
+                <button className="btn btn-primary">Action</button>
+                <button className="btn btn-secondary">Secondary</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
