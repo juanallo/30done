@@ -1,0 +1,136 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Product Requirements Document (PRD)
+Project Title: 30done
+Owner: Juan Allo Ron
+Version: 1.0
+Date: June 19, 2025
+
+1. Objective
+Build a mobile/web app that helps users commit to and complete 30-day fitness challenges like the “Cardio 30-Day Challenge.” The app enables users to select a challenge, receive daily reminders, view exercise instructions, and track progress with a visual “don’t break the chain” system.
+
+2. Target Users
+Fitness enthusiasts following challenge calendars from sources like Neila Rey, Chloe Ting, etc.
+
+Beginners wanting simple, guided routines.
+
+Busy professionals looking for short, structured exercise routines.
+
+Habit-builders using streak-based motivation.
+
+3. Key Features
+3.1 Challenge Library
+List of available challenges (e.g., Cardio 30-Day Challenge).
+
+Each challenge includes:
+
+Title and duration
+
+Daily breakdown
+
+Exercise illustrations/screenshots
+
+Estimated time per day
+
+3.2 Daily Tracker
+“Don’t break the chain” calendar view
+
+Mark day as “Completed” or “Skipped”
+
+Auto-progress to next day after completion
+
+History view for past days
+
+3.3 Exercise View
+Daily view with:
+
+Today’s workout details (e.g., “100 high knees, 40 climbers”)
+
+Visual instructions (images or GIFs)
+
+Optional timer
+
+3.4 Notifications / Reminders
+Daily reminders at user-selected time
+
+Smart nudges if workout hasn’t been logged by evening
+
+3.5 Progress & Streaks
+Streak counter
+
+Completion percentage
+
+Ability to restart/reset challenge
+
+4. Optional (Nice to Have)
+Audio/voice instructions
+
+Custom challenge creation
+
+Social sharing or community challenges
+
+Apple Health / Google Fit integration
+
+In-app challenges with increasing difficulty
+
+5. UX Notes
+Minimal, clear UI — no account needed to get started
+
+Emphasis on visual progress (checkmarks, streak chain)
+
+Fast onboarding: “Pick a challenge → Set reminder → Start today”
+
+6. Technical Requirements
+Platform
+MVP: Mobile-first PWA or Native (Flutter or React Native)
+
+Optionally expand to web dashboard
+
+Data Storage
+Local DB for offline use (e.g., SQLite)
+
+Optional cloud sync with login (Firebase or Supabase)
+
+Stack Suggestions
+React Native or Flutter
+
+Firebase Auth (optional), Firestore/SQLite for data
+
+Push Notifications via OneSignal / Firebase Messaging
+
+7. User Stories
+User Story 1: Select a Challenge
+As a user, I want to browse a list of challenges so I can pick one that fits my goals.
+
+User Story 2: See Today’s Task
+As a user, I want to view today’s workout so I know what exercises to do.
+
+User Story 3: Complete a Day
+As a user, I want to check off a day so I can track my progress.
+
+User Story 4: View Progress
+As a user, I want to see my streak and history so I stay motivated.
+
+User Story 5: Get Reminders
+As a user, I want daily notifications so I don’t forget to work out.
+
+8. Success Metrics
+Daily active users (DAU)
+
+Average streak length per user
+
+Challenge completion rate
+
+User retention at day 7, 14, 30
+
+9. Future Ideas
+AI-generated custom challenges
+
+Challenge marketplace
+
+Friend challenges / group tracking
+
+Streak repair with tokens (gamified model)

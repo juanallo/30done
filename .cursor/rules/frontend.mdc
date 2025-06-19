@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Stack
+
+- package manager: yarn
+- Web: NextJS
+- UI components: https://daisyui.com/
+- Style: tailwind
+- API client: react-query
+- API server: GQL 
+- Testing: Vitest, React Testing Library, & Playwright
+- Component Development: Storybook 
+- Hosting: vercel
+- Auth and user: clerk
