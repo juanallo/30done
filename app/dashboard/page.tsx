@@ -13,12 +13,14 @@ import {
   Play,
   ArrowLeft,
   Bell,
+  CheckCircle,
 } from "lucide-react";
 import { useChallenge } from "@/hooks/use-challenge";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { selectedChallenge, currentDay, completedDays, streak, progress } = useChallenge();
+  const { selectedChallenge, currentDay, completedDays, streak, progress, hasCompletedToday } = useChallenge();
 
   if (!selectedChallenge) {
     return (
@@ -94,6 +96,16 @@ export default function DashboardPage() {
                 <Badge>Day {currentDay}</Badge>
               </div>
 
+              {/* Today's completion status */}
+              {hasCompletedToday() && (
+                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-green-700">
+                    <CheckCircle className="h-4 w-4" />
+                    <span className="text-sm font-medium">Today's workout completed!</span>
+                  </div>
+                </div>
+              )}
+
               {selectedChallenge.exercises[0] && (
                 <div className="mb-4">
                   <h4 className="font-semibold mb-2">
@@ -114,10 +126,16 @@ export default function DashboardPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => router.push("/workout")}
-                  className="btn btn-primary flex-1"
+                  disabled={hasCompletedToday()}
+                  className={cn(
+                    "btn flex-1",
+                    hasCompletedToday() 
+                      ? "btn-disabled opacity-50 cursor-not-allowed" 
+                      : "btn-primary"
+                  )}
                 >
                   <Play className="h-4 w-4 mr-2" />
-                  Start Workout
+                  {hasCompletedToday() ? "Completed Today" : "Start Workout"}
                 </button>
                 <button
                   className="btn btn-ghost"

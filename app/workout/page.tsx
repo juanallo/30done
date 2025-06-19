@@ -3,12 +3,13 @@
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, ArrowLeft } from "lucide-react";
+import { CheckCircle, ArrowLeft, AlertCircle } from "lucide-react";
 import { useChallenge } from "@/hooks/use-challenge";
+import { cn } from "@/lib/utils";
 
 export default function WorkoutPage() {
   const router = useRouter();
-  const { selectedChallenge, currentDay, markDayComplete } = useChallenge();
+  const { selectedChallenge, currentDay, markDayComplete, hasCompletedToday } = useChallenge();
 
   if (!selectedChallenge) {
     return (
@@ -71,16 +72,32 @@ export default function WorkoutPage() {
                   </div>
                 </div>
 
+                {/* Show completion status if already completed today */}
+                {hasCompletedToday() && (
+                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2 text-green-700">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm font-medium">Today's workout already completed!</span>
+                    </div>
+                  </div>
+                )}
+
                 <div className="space-y-3">
                   <button
                     onClick={() => {
                       markDayComplete(currentDay);
                       router.push("/dashboard");
                     }}
-                    className="btn btn-success w-full"
+                    disabled={hasCompletedToday()}
+                    className={cn(
+                      "btn w-full",
+                      hasCompletedToday() 
+                        ? "btn-disabled opacity-50 cursor-not-allowed" 
+                        : "btn-success"
+                    )}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Mark as Complete
+                    {hasCompletedToday() ? "Already Completed Today" : "Mark as Complete"}
                   </button>
                   <button
                     className="btn btn-outline w-full"
