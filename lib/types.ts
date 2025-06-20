@@ -5,6 +5,11 @@ export interface Exercise {
   duration: number;
 }
 
+export interface ChallengeImage {
+  src: string;
+  title: string;
+}
+
 export interface Challenge {
   id: number;
   title: string;
@@ -13,4 +18,5 @@ export interface Challenge {
   estimatedTime: string;
   difficulty: string;
   exercises: Exercise[];
+  images?: ChallengeImage[];
 } 
