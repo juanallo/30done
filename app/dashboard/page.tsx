@@ -59,7 +59,6 @@ export default function DashboardPage() {
           </div>
 
           <div className="mb-4">
-            <p className="text-gray-600">Welcome back! 👋</p>
             <h1 className="text-2xl font-bold">{selectedChallenge.title}</h1>
           </div>
 

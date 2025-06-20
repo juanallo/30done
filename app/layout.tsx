@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   description: 'Complete 30-day fitness challenges and build lasting habits with our streak-based tracking system.',
   generator: 'v0.dev',
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: '/favicon.png',
+    apple: '/favicon.png',
   },
 }
 
