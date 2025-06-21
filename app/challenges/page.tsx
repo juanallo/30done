@@ -238,12 +238,20 @@ export default function ChallengesPage() {
                         </div>
                       </div>
 
-                      <button
-                        onClick={() => handleStartChallenge(challenge)}
-                        className="btn btn-primary w-full"
-                      >
-                        Start Challenge
-                      </button>
+                      <div className="flex gap-2 mt-4">
+                        <button
+                          onClick={() => router.push(`/challenges/${challenge.id}`)}
+                          className="btn btn-outline flex-1"
+                        >
+                          View Details
+                        </button>
+                        <button
+                          onClick={() => handleStartChallenge(challenge)}
+                          className="btn btn-primary flex-1"
+                        >
+                          Start Challenge
+                        </button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
