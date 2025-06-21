@@ -10,16 +10,16 @@ import { useChallenge } from "@/hooks/useChallenge";
 
 export default function ChallengesPage() {
   const router = useRouter();
-  const { 
-    activeChallenges, 
-    getChallengeProgress, 
-    startChallenge, 
-    resetChallenge, 
+  const {
+    activeChallenges,
+    getChallengeProgress,
+    startChallenge,
+    resetChallenge,
     removeChallenge,
-    isLoading
+    isLoading,
   } = useChallenge();
 
-  const handleStartChallenge = (challenge: typeof challenges[0]) => {
+  const handleStartChallenge = (challenge: (typeof challenges)[0]) => {
     startChallenge(challenge);
     router.push("/dashboard");
   };
@@ -36,11 +36,23 @@ export default function ChallengesPage() {
     removeChallenge(challengeId);
   };
 
-  // Filter out active challenges from the available list
-  const availableChallenges = challenges.filter(
-    challenge => !activeChallenges.some(ac => ac.challenge.id === challenge.id)
-  );
+  const difficultyOrder = {
+    Beginner: 0,
+    Intermediate: 1,
+    Advanced: 2,
+    Varies: 3,
+  };
 
+  const availableChallenges = challenges
+    .filter(
+      (challenge) =>
+        !activeChallenges.some((ac) => ac.challenge.id === challenge.id)
+    )
+    .sort(
+      (a, b) =>
+        (difficultyOrder[a.difficulty as keyof typeof difficultyOrder] ?? 99) -
+        (difficultyOrder[b.difficulty as keyof typeof difficultyOrder] ?? 99)
+    );
   // Loading skeleton component
   const LoadingSkeleton = () => (
     <div className="space-y-4">
@@ -109,9 +121,14 @@ export default function ChallengesPage() {
                 </h2>
                 <div className="space-y-4">
                   {activeChallenges.map((activeChallenge) => {
-                    const progress = getChallengeProgress(activeChallenge.challenge.id);
+                    const progress = getChallengeProgress(
+                      activeChallenge.challenge.id
+                    );
                     return (
-                      <Card key={activeChallenge.challenge.id} className="overflow-hidden">
+                      <Card
+                        key={activeChallenge.challenge.id}
+                        className="overflow-hidden"
+                      >
                         <CardContent className="p-6">
                           <div className="flex justify-between items-center mb-3">
                             <div className="flex-1">
@@ -121,9 +138,11 @@ export default function ChallengesPage() {
                                 </h3>
                                 <Badge
                                   variant={
-                                    activeChallenge.challenge.difficulty === "Beginner"
+                                    activeChallenge.challenge.difficulty ===
+                                    "Beginner"
                                       ? "secondary"
-                                      : activeChallenge.challenge.difficulty === "Intermediate"
+                                      : activeChallenge.challenge.difficulty ===
+                                        "Intermediate"
                                       ? "default"
                                       : "destructive"
                                   }
@@ -141,11 +160,16 @@ export default function ChallengesPage() {
                           <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                             <div className="flex items-center gap-1">
                               <Calendar className="h-4 w-4" />
-                              <span>Day {activeChallenge.currentDay} of {activeChallenge.challenge.duration}</span>
+                              <span>
+                                Day {activeChallenge.currentDay} of{" "}
+                                {activeChallenge.challenge.duration}
+                              </span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="h-4 w-4" />
-                              <span>{activeChallenge.challenge.estimatedTime}</span>
+                              <span>
+                                {activeChallenge.challenge.estimatedTime}
+                              </span>
                             </div>
                           </div>
 
@@ -156,8 +180,8 @@ export default function ChallengesPage() {
                               <span>{Math.round(progress)}%</span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-primary h-2 rounded-full transition-all duration-300" 
+                              <div
+                                className="bg-primary h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${progress}%` }}
                               ></div>
                             </div>
@@ -165,20 +189,32 @@ export default function ChallengesPage() {
 
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleContinueChallenge(activeChallenge.challenge.id)}
+                              onClick={() =>
+                                handleContinueChallenge(
+                                  activeChallenge.challenge.id
+                                )
+                              }
                               className="btn btn-primary flex-1"
                             >
                               Continue Challenge
                             </button>
                             <button
-                              onClick={() => handleResetChallenge(activeChallenge.challenge.id)}
+                              onClick={() =>
+                                handleResetChallenge(
+                                  activeChallenge.challenge.id
+                                )
+                              }
                               className="btn btn-ghost btn-square"
                               title="Reset Challenge"
                             >
                               <RotateCcw className="h-4 w-4" />
                             </button>
                             <button
-                              onClick={() => handleRemoveChallenge(activeChallenge.challenge.id)}
+                              onClick={() =>
+                                handleRemoveChallenge(
+                                  activeChallenge.challenge.id
+                                )
+                              }
                               className="btn btn-ghost btn-square text-red-500"
                               title="Remove Challenge"
                             >
@@ -196,7 +232,9 @@ export default function ChallengesPage() {
             {/* Available Challenges Section */}
             <div>
               <h2 className="text-lg font-semibold mb-3">
-                {activeChallenges.length > 0 ? "Other Challenges" : "Available Challenges"}
+                {activeChallenges.length > 0
+                  ? "Other Challenges"
+                  : "Available Challenges"}
               </h2>
               <div className="space-y-4">
                 {availableChallenges.map((challenge) => (
@@ -240,7 +278,9 @@ export default function ChallengesPage() {
 
                       <div className="flex gap-2 mt-4">
                         <button
-                          onClick={() => router.push(`/challenges/${challenge.id}`)}
+                          onClick={() =>
+                            router.push(`/challenges/${challenge.id}`)
+                          }
                           className="btn btn-outline flex-1"
                         >
                           View Details
@@ -262,4 +302,4 @@ export default function ChallengesPage() {
       </div>
     </div>
   );
-} 
+}
