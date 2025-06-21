@@ -11,7 +11,7 @@ export interface ChallengeImage {
 }
 
 export interface Challenge {
-  id: number;
+  id: string;
   title: string;
   duration: number;
   description: string;
@@ -28,7 +28,7 @@ export interface CompletionRecord {
 
 // New interface for storing only challenge ID and progress data
 export interface StoredChallengeData {
-  challengeId: number;
+  challengeId: string;
   currentDay: number;
   completedDays: number[];
   completionRecords: CompletionRecord[];

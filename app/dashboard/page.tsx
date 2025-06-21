@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Calendar,
   Clock,
@@ -19,13 +20,107 @@ import {
 import { useChallenge } from "@/hooks/useChallenge";
 import { cn } from "@/lib/utils";
 
+// Loading skeleton component
+const DashboardSkeleton = () => (
+  <div className="min-h-screen bg-gray-50">
+    <div className="max-w-md mx-auto">
+      {/* Header Skeleton */}
+      <div className="bg-white p-4 rounded-b-3xl shadow-sm">
+        <div className="flex items-center justify-between mb-4 pt-4">
+          <Skeleton className="h-10 w-10 rounded" />
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-6 w-6 rounded" />
+            <Skeleton className="w-8 h-8 rounded-full" />
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <Skeleton className="h-8 w-32 mb-2" />
+          <Skeleton className="h-4 w-24" />
+        </div>
+
+        {/* Add Challenge Button Skeleton */}
+        <Card className="mb-4">
+          <CardContent className="p-4">
+            <Skeleton className="h-12 w-full rounded" />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Challenge Cards Skeleton */}
+      <div className="p-4 space-y-4">
+        {Array.from({ length: 2 }, (_, i) => (
+          <Card key={i} className="overflow-hidden">
+            <CardContent className="p-4">
+              {/* Challenge Header */}
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <Skeleton className="h-6 w-40 mb-2" />
+                  <div className="flex items-center gap-2 mb-2">
+                    <Skeleton className="h-5 w-16 rounded" />
+                    <Skeleton className="h-5 w-24 rounded" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+                <Skeleton className="h-2 w-full rounded-full mb-2" />
+                <div className="flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-1">
+                    <Skeleton className="h-4 w-4 rounded" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Skeleton className="h-4 w-4 rounded" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Today's Workout */}
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+                <Skeleton className="h-4 w-full mb-2" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-3 w-3 rounded" />
+                  <Skeleton className="h-3 w-20" />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <Skeleton className="h-12 flex-1 rounded" />
+                <Skeleton className="h-12 w-12 rounded" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 export default function DashboardPage() {
   const router = useRouter();
   const { 
     activeChallenges, 
     getChallengeProgress, 
-    hasCompletedToday 
+    hasCompletedToday,
+    isLoading
   } = useChallenge();
+
+  // Show loading skeleton while data is being loaded
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   if (activeChallenges.length === 0) {
     return (

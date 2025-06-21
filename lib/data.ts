@@ -3,7 +3,7 @@ import { Challenge } from "./types";
 // Mock data for challenges
 export const challenges: Challenge[] = [
   {
-    id: 1,
+    id: "550e8400-e29b-41d4-a716-446655440001",
     title: "Cardio 30 Day Challenge",
     duration: 30,
     description: "A 30 day challenge focused on high knees and climbers to boost your cardio, based on the popular Neila Rey workout.",
@@ -47,7 +47,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 2,
+    id: "550e8400-e29b-41d4-a716-446655440002",
     title: "Core Strength Challenge",
     duration: 30,
     description: "Build a stronger core with daily targeted exercises",
@@ -237,7 +237,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 3,
+    id: "550e8400-e29b-41d4-a716-446655440003",
     title: "Full Body Transformation",
     duration: 30,
     description: "Complete body workout combining strength and cardio",
@@ -427,7 +427,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 4,
+    id: "550e8400-e29b-41d4-a716-446655440004",
     title: "1400 Burpees Challenge",
     duration: 30,
     description: "A 30-day challenge to complete 1400 burpees, with some plank exercises included.",
@@ -471,7 +471,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 5,
+    id: "550e8400-e29b-41d4-a716-446655440005",
     title: "50 Push-ups Challenge",
     duration: 30,
     description: "A 30-day challenge to build up to 50 consecutive push-ups, with push-up planks included for isometric strength. Up to 60 seconds rest between sets.",
@@ -515,7 +515,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 6,
+    id: "550e8400-e29b-41d4-a716-446655440006",
     title: "Legs of Steel Challenge",
     duration: 30,
     description: "A 30-day challenge to build strong and powerful legs with lunges and side lunges. Each workout consists of 3 sets with 20 seconds rest between sets.",
@@ -559,7 +559,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 7,
+    id: "550e8400-e29b-41d4-a716-446655440007",
     title: "Calves of Steel Challenge",
     duration: 30,
     description: "A 30-day challenge for stronger, more defined calves. This challenge alternates between high-repetition calf raises and isometric holds to build endurance and strength. Calf raises can be done throughout the day.",
@@ -602,7 +602,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 9,
+    id: "550e8400-e29b-41d4-a716-446655440009",
     title: "Hollow Hold Challenge",
     duration: 30,
     description: "A 30-day challenge to master the hollow hold and superman hold, building a rock-solid core by alternating between two foundational gymnastic exercises.",
@@ -645,7 +645,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 10,
+    id: "550e8400-e29b-41d4-a716-446655440010",
     title: "The Long Run",
     duration: 30,
     description: "A 30-day challenge to build running endurance, progressing from 4 to 40 minutes. The plan includes a mix of running, walking, and sprinting to improve cardiovascular fitness.",
@@ -685,7 +685,7 @@ export const challenges: Challenge[] = [
     ],
   },
   {
-    id: 11,
+    id: "550e8400-e29b-41d4-a716-446655440011",
     title: "Jump Rope 30-Day Challenge",
     duration: 30,
     description: "A 30-day challenge to improve cardio and coordination with a variety of jump rope workouts, including timed sets, non-stop skips, and total skips per day.",
@@ -730,7 +730,7 @@ export const challenges: Challenge[] = [
 ];
 
 // Helper function to get challenge by ID
-export function getChallengeById(id: number): Challenge | undefined {
+export function getChallengeById(id: string): Challenge | undefined {
   return challenges.find(challenge => challenge.id === id);
 }
 

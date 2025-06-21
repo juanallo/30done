@@ -24,15 +24,15 @@ export default function ChallengesPage() {
     router.push("/dashboard");
   };
 
-  const handleContinueChallenge = (challengeId: number) => {
+  const handleContinueChallenge = (challengeId: string) => {
     router.push(`/workout/${challengeId}`);
   };
 
-  const handleResetChallenge = (challengeId: number) => {
+  const handleResetChallenge = (challengeId: string) => {
     resetChallenge(challengeId);
   };
 
-  const handleRemoveChallenge = (challengeId: number) => {
+  const handleRemoveChallenge = (challengeId: string) => {
     removeChallenge(challengeId);
   };
 

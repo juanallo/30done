@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { use } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, ArrowLeft } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
 import { cn } from "@/lib/utils";
@@ -22,14 +23,71 @@ interface WorkoutPageProps {
   }>;
 }
 
+// Loading skeleton component
+const WorkoutSkeleton = () => (
+  <div className="min-h-screen bg-gray-50">
+    <div className="max-w-md mx-auto">
+      {/* Header Skeleton */}
+      <div className="bg-white p-1 shadow-sm">
+        <div className="flex items-center justify-between mb-4 pt-4">
+          <Skeleton className="h-10 w-10 rounded" />
+          <Skeleton className="h-6 w-32" />
+          <div className="w-10"></div>
+        </div>
+      </div>
+
+      <div className="p-4">
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            {/* Exercise Icon and Title */}
+            <div className="text-center mb-6">
+              <Skeleton className="w-32 h-32 rounded-full mx-auto mb-4" />
+              <Skeleton className="h-8 w-48 mx-auto mb-2" />
+              <Skeleton className="h-4 w-64 mx-auto" />
+            </div>
+
+            {/* Stats */}
+            <div className="space-y-4 mb-6">
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-6 w-20 rounded" />
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="space-y-3">
+              <Skeleton className="h-12 w-full rounded" />
+              <Skeleton className="h-12 w-full rounded" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Carousel Skeleton */}
+        <div className="mb-6 w-full">
+          <Skeleton className="w-full h-64 rounded-lg" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 export default function WorkoutPage({ params }: WorkoutPageProps) {
   const router = useRouter();
   const { challengeId } = use(params);
-  const challengeIdNum = parseInt(challengeId);
-  const { getActiveChallenge, markDayComplete, hasCompletedToday } = useChallenge();
+  const { getActiveChallenge, markDayComplete, hasCompletedToday, isLoading } = useChallenge();
 
-  const activeChallenge = getActiveChallenge(challengeIdNum);
+  const activeChallenge = getActiveChallenge(challengeId);
 
+  // Show loading skeleton while data is being loaded
+  if (isLoading) {
+    return <WorkoutSkeleton />;
+  }
+
+  // Show not found state only after loading is complete
   if (!activeChallenge) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -107,7 +165,7 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
               </div>
 
               {/* Show completion status if already completed today */}
-              {hasCompletedToday(challengeIdNum) && (
+              {hasCompletedToday(challengeId) && (
                 <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-center gap-2 text-green-700">
                     <CheckCircle className="h-4 w-4" />
@@ -121,19 +179,19 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
               <div className="space-y-3">
                 <button
                   onClick={() => {
-                    markDayComplete(challengeIdNum, activeChallenge.currentDay);
+                    markDayComplete(challengeId, activeChallenge.currentDay);
                     router.push("/dashboard");
                   }}
-                  disabled={hasCompletedToday(challengeIdNum)}
+                  disabled={hasCompletedToday(challengeId)}
                   className={cn(
                     "btn w-full",
-                    hasCompletedToday(challengeIdNum)
+                    hasCompletedToday(challengeId)
                       ? "btn-disabled opacity-50 cursor-not-allowed"
                       : "btn-success"
                   )}
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  {hasCompletedToday(challengeIdNum)
+                  {hasCompletedToday(challengeId)
                     ? "Already Completed Today"
                     : "Mark as Complete"}
                 </button>

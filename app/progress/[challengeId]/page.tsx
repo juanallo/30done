@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { use } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, ArrowLeft, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useChallenge } from "@/hooks/useChallenge";
@@ -13,15 +14,82 @@ interface ProgressPageProps {
   }>;
 }
 
+// Loading skeleton component
+const ProgressSkeleton = () => (
+  <div className="min-h-screen bg-gray-50">
+    <div className="max-w-md mx-auto">
+      {/* Header Skeleton */}
+      <div className="bg-white p-4 rounded-b-3xl shadow-sm">
+        <div className="flex items-center justify-between mb-4 pt-4">
+          <Skeleton className="h-10 w-10 rounded" />
+          <Skeleton className="h-6 w-20" />
+          <div className="w-10"></div>
+        </div>
+
+        <div className="mb-4">
+          <Skeleton className="h-6 w-48 mb-2" />
+          <Skeleton className="h-4 w-32" />
+        </div>
+      </div>
+
+      {/* Progress Grid Skeleton */}
+      <div className="p-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Challenge Progress
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-6 gap-2">
+              {Array.from({ length: 30 }, (_, i) => (
+                <Skeleton key={i} className="aspect-square rounded-full" />
+              ))}
+            </div>
+
+            {/* Legend Skeleton */}
+            <div className="mt-4 space-y-2 text-sm grid grid-cols-2">
+              {Array.from({ length: 4 }, (_, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Skeleton className="w-4 h-4 rounded-full" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              ))}
+            </div>
+
+            {/* Stats Skeleton */}
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="text-center p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-8 w-12 mx-auto mb-1" />
+                <Skeleton className="h-3 w-20 mx-auto" />
+              </div>
+              <div className="text-center p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-8 w-12 mx-auto mb-1" />
+                <Skeleton className="h-3 w-16 mx-auto" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </div>
+);
+
 export default function ProgressPage({ params }: ProgressPageProps) {
   const router = useRouter();
   const { challengeId } = use(params);
-  const challengeIdNum = parseInt(challengeId);
-  const { getActiveChallenge, markDayComplete, hasCompletedToday } =
+  const { getActiveChallenge, markDayComplete, hasCompletedToday, isLoading } =
     useChallenge();
 
-  const activeChallenge = getActiveChallenge(challengeIdNum);
+  const activeChallenge = getActiveChallenge(challengeId);
 
+  // Show loading skeleton while data is being loaded
+  if (isLoading) {
+    return <ProgressSkeleton />;
+  }
+
+  // Show not found state only after loading is complete
   if (!activeChallenge) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -51,7 +119,7 @@ export default function ProgressPage({ params }: ProgressPageProps) {
     // Can't mark if already completed
     if (activeChallenge.completedDays.includes(day)) return false;
     // Can't mark if already completed something today
-    if (hasCompletedToday(challengeIdNum)) return false;
+    if (hasCompletedToday(challengeId)) return false;
     return true;
   };
 
@@ -120,7 +188,7 @@ export default function ProgressPage({ params }: ProgressPageProps) {
                         )}
                         onClick={() => {
                           if (canMarkComplete(day)) {
-                            markDayComplete(challengeIdNum, day);
+                            markDayComplete(challengeId, day);
                           }
                         }}
                         title={

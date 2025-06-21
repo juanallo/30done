@@ -22,7 +22,7 @@ export function useChallenge() {
   }, []);
 
   // Helper function to convert stored data to ActiveChallenge
-  const getActiveChallenge = (challengeId: number): ActiveChallenge | undefined => {
+  const getActiveChallenge = (challengeId: string): ActiveChallenge | undefined => {
     const storedChallenge = storedChallenges.find(sc => sc.challengeId === challengeId);
     if (!storedChallenge) return undefined;
 
@@ -50,14 +50,14 @@ export function useChallenge() {
     return new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
   };
 
-  const hasCompletedToday = (challengeId: number) => {
+  const hasCompletedToday = (challengeId: string) => {
     const today = getTodayDate();
     const storedChallenge = storedChallenges.find(sc => sc.challengeId === challengeId);
     if (!storedChallenge) return false;
     return storedChallenge.completionRecords.some(record => record.date === today);
   };
 
-  const markDayComplete = (challengeId: number, day: number) => {
+  const markDayComplete = (challengeId: string, day: number) => {
     const today = getTodayDate();
     
     setStoredChallenges(prevStoredChallenges => {
@@ -138,7 +138,7 @@ export function useChallenge() {
     localStorage.setItem("activeChallenges", JSON.stringify(newStoredChallenges));
   };
 
-  const resetChallenge = (challengeId: number) => {
+  const resetChallenge = (challengeId: string) => {
     setStoredChallenges(prevStoredChallenges => {
       const challengeIndex = prevStoredChallenges.findIndex(sc => sc.challengeId === challengeId);
       if (challengeIndex === -1) return prevStoredChallenges;
@@ -163,7 +163,7 @@ export function useChallenge() {
     });
   };
 
-  const removeChallenge = (challengeId: number) => {
+  const removeChallenge = (challengeId: string) => {
     setStoredChallenges(prevStoredChallenges => {
       const newStoredChallenges = prevStoredChallenges.filter(sc => sc.challengeId !== challengeId);
       localStorage.setItem("activeChallenges", JSON.stringify(newStoredChallenges));
@@ -171,7 +171,7 @@ export function useChallenge() {
     });
   };
 
-  const getChallengeProgress = (challengeId: number) => {
+  const getChallengeProgress = (challengeId: string) => {
     const storedChallenge = storedChallenges.find(sc => sc.challengeId === challengeId);
     if (!storedChallenge) return 0;
     
@@ -200,8 +200,7 @@ export function useChallenge() {
     removeChallenge,
     hasCompletedToday,
     isLoading,
-    
-    // Backward compatibility
+    // Legacy single-challenge properties (for backward compatibility)
     selectedChallenge,
     currentDay,
     completedDays,

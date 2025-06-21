@@ -11,7 +11,7 @@ import { useChallenge } from "@/hooks/useChallenge";
 export default function ChallengeDetailsPage() {
   const router = useRouter();
   const params = useParams();
-  const challengeId = parseInt(params.challengeId as string, 10);
+  const challengeId = params.challengeId as string;
   const challenge = getChallengeById(challengeId);
   const { startChallenge } = useChallenge();
 
