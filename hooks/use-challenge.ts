@@ -4,6 +4,7 @@ import { getChallengeById } from "@/lib/data";
 
 export function useChallenge() {
   const [storedChallenges, setStoredChallenges] = useState<StoredChallengeData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Load data from localStorage
@@ -17,6 +18,7 @@ export function useChallenge() {
         setStoredChallenges([]);
       }
     }
+    setIsLoading(false);
   }, []);
 
   // Helper function to convert stored data to ActiveChallenge
@@ -197,6 +199,7 @@ export function useChallenge() {
     resetChallenge,
     removeChallenge,
     hasCompletedToday,
+    isLoading,
     
     // Backward compatibility
     selectedChallenge,
