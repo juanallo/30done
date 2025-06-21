@@ -16,7 +16,7 @@ import {
   CheckCircle,
   Plus,
 } from "lucide-react";
-import { useChallenge } from "@/hooks/use-challenge";
+import { useChallenge } from "@/hooks/useChallenge";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {

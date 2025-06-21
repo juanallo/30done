@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Calendar, Clock, RotateCcw, Trash2 } from "lucide-react";
 import { challenges } from "@/lib/data";
-import { useChallenge } from "@/hooks/use-challenge";
+import { useChallenge } from "@/hooks/useChallenge";
 
 export default function ChallengesPage() {
   const router = useRouter();

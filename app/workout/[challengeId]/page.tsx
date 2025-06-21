@@ -6,7 +6,7 @@ import { use } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, ArrowLeft } from "lucide-react";
-import { useChallenge } from "@/hooks/use-challenge";
+import { useChallenge } from "@/hooks/useChallenge";
 import { cn } from "@/lib/utils";
 import {
   Carousel,

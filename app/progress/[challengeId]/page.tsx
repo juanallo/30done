@@ -5,7 +5,7 @@ import { use } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, ArrowLeft, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useChallenge } from "@/hooks/use-challenge";
+import { useChallenge } from "@/hooks/useChallenge";
 
 interface ProgressPageProps {
   params: Promise<{
