@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { PWAInstaller, IOSInstallPrompt } from '@/components/pwa-installer'
 import { PWADebug } from '@/components/pwa-debug'
@@ -19,13 +19,6 @@ export const metadata: Metadata = {
       { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
     ],
   },
-  themeColor: '#3b82f6',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -45,6 +38,14 @@ export const metadata: Metadata = {
     title: '30done - 30-Day Fitness Challenges',
     description: 'Complete 30-day fitness challenges and build lasting habits with our streak-based tracking system.',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#3b82f6',
 }
 
 export default function RootLayout({
