@@ -1,16 +1,48 @@
 import { useState, useEffect } from "react";
-import { Challenge, ActiveChallenge, CompletionRecord } from "@/lib/types";
+import { Challenge, ActiveChallenge, CompletionRecord, StoredChallengeData } from "@/lib/types";
+import { getChallengeById } from "@/lib/data";
 
 export function useChallenge() {
-  const [activeChallenges, setActiveChallenges] = useState<ActiveChallenge[]>([]);
+  const [storedChallenges, setStoredChallenges] = useState<StoredChallengeData[]>([]);
 
   useEffect(() => {
     // Load data from localStorage
-    const activeChallengesData = localStorage.getItem("activeChallenges");
-    if (activeChallengesData) {
-      setActiveChallenges(JSON.parse(activeChallengesData));
+    const storedChallengesData = localStorage.getItem("activeChallenges");
+    if (storedChallengesData) {
+      try {
+        const parsedData = JSON.parse(storedChallengesData);
+        setStoredChallenges(parsedData);
+      } catch (error) {
+        console.error("Error parsing stored challenges:", error);
+        setStoredChallenges([]);
+      }
     }
   }, []);
+
+  // Helper function to convert stored data to ActiveChallenge
+  const getActiveChallenge = (challengeId: number): ActiveChallenge | undefined => {
+    const storedChallenge = storedChallenges.find(sc => sc.challengeId === challengeId);
+    if (!storedChallenge) return undefined;
+
+    const challenge = getChallengeById(challengeId);
+    if (!challenge) return undefined;
+
+    return {
+      challenge,
+      currentDay: storedChallenge.currentDay,
+      completedDays: storedChallenge.completedDays,
+      completionRecords: storedChallenge.completionRecords,
+      streak: storedChallenge.streak,
+      startDate: storedChallenge.startDate,
+    };
+  };
+
+  // Get all active challenges with full challenge data
+  const getActiveChallenges = (): ActiveChallenge[] => {
+    return storedChallenges
+      .map(stored => getActiveChallenge(stored.challengeId))
+      .filter((challenge): challenge is ActiveChallenge => challenge !== undefined);
+  };
 
   const getTodayDate = () => {
     return new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
@@ -18,35 +50,35 @@ export function useChallenge() {
 
   const hasCompletedToday = (challengeId: number) => {
     const today = getTodayDate();
-    const challenge = activeChallenges.find(ac => ac.challenge.id === challengeId);
-    if (!challenge) return false;
-    return challenge.completionRecords.some(record => record.date === today);
+    const storedChallenge = storedChallenges.find(sc => sc.challengeId === challengeId);
+    if (!storedChallenge) return false;
+    return storedChallenge.completionRecords.some(record => record.date === today);
   };
 
   const markDayComplete = (challengeId: number, day: number) => {
     const today = getTodayDate();
     
-    setActiveChallenges(prevChallenges => {
-      const challengeIndex = prevChallenges.findIndex(ac => ac.challenge.id === challengeId);
-      if (challengeIndex === -1) return prevChallenges;
+    setStoredChallenges(prevStoredChallenges => {
+      const challengeIndex = prevStoredChallenges.findIndex(sc => sc.challengeId === challengeId);
+      if (challengeIndex === -1) return prevStoredChallenges;
 
-      const challenge = prevChallenges[challengeIndex];
+      const storedChallenge = prevStoredChallenges[challengeIndex];
       
       // Check if already completed today for this challenge
       if (hasCompletedToday(challengeId)) {
         console.log("Already completed a day today for this challenge");
-        return prevChallenges;
+        return prevStoredChallenges;
       }
 
       // Check if this specific day is already completed
-      if (challenge.completedDays.includes(day)) {
+      if (storedChallenge.completedDays.includes(day)) {
         console.log("This day is already completed");
-        return prevChallenges;
+        return prevStoredChallenges;
       }
 
-      const newCompleted = [...challenge.completedDays, day].sort((a, b) => a - b);
+      const newCompleted = [...storedChallenge.completedDays, day].sort((a, b) => a - b);
       const newRecord: CompletionRecord = { day, date: today };
-      const newRecords = [...challenge.completionRecords, newRecord];
+      const newRecords = [...storedChallenge.completionRecords, newRecord];
 
       // Calculate streak
       let currentStreak = 0;
@@ -59,23 +91,24 @@ export function useChallenge() {
       }
 
       // Update current day
-      const nextDay = Math.min(day + 1, challenge.challenge.duration);
+      const challenge = getChallengeById(challengeId);
+      const nextDay = challenge ? Math.min(day + 1, challenge.duration) : day + 1;
 
-      const updatedChallenge: ActiveChallenge = {
-        ...challenge,
+      const updatedStoredChallenge: StoredChallengeData = {
+        ...storedChallenge,
         currentDay: nextDay,
         completedDays: newCompleted,
         completionRecords: newRecords,
         streak: currentStreak,
       };
 
-      const newChallenges = [...prevChallenges];
-      newChallenges[challengeIndex] = updatedChallenge;
+      const newStoredChallenges = [...prevStoredChallenges];
+      newStoredChallenges[challengeIndex] = updatedStoredChallenge;
       
       // Save to localStorage
-      localStorage.setItem("activeChallenges", JSON.stringify(newChallenges));
+      localStorage.setItem("activeChallenges", JSON.stringify(newStoredChallenges));
       
-      return newChallenges;
+      return newStoredChallenges;
     });
   };
 
@@ -83,14 +116,14 @@ export function useChallenge() {
     const today = getTodayDate();
     
     // Check if challenge is already active
-    const isAlreadyActive = activeChallenges.some(ac => ac.challenge.id === challenge.id);
+    const isAlreadyActive = storedChallenges.some(sc => sc.challengeId === challenge.id);
     if (isAlreadyActive) {
       console.log("Challenge is already active");
       return;
     }
 
-    const newActiveChallenge: ActiveChallenge = {
-      challenge,
+    const newStoredChallenge: StoredChallengeData = {
+      challengeId: challenge.id,
       currentDay: 1,
       completedDays: [],
       completionRecords: [],
@@ -98,21 +131,21 @@ export function useChallenge() {
       startDate: today,
     };
 
-    const newChallenges = [...activeChallenges, newActiveChallenge];
-    setActiveChallenges(newChallenges);
-    localStorage.setItem("activeChallenges", JSON.stringify(newChallenges));
+    const newStoredChallenges = [...storedChallenges, newStoredChallenge];
+    setStoredChallenges(newStoredChallenges);
+    localStorage.setItem("activeChallenges", JSON.stringify(newStoredChallenges));
   };
 
   const resetChallenge = (challengeId: number) => {
-    setActiveChallenges(prevChallenges => {
-      const challengeIndex = prevChallenges.findIndex(ac => ac.challenge.id === challengeId);
-      if (challengeIndex === -1) return prevChallenges;
+    setStoredChallenges(prevStoredChallenges => {
+      const challengeIndex = prevStoredChallenges.findIndex(sc => sc.challengeId === challengeId);
+      if (challengeIndex === -1) return prevStoredChallenges;
 
-      const challenge = prevChallenges[challengeIndex];
+      const storedChallenge = prevStoredChallenges[challengeIndex];
       const today = getTodayDate();
 
-      const resetChallenge: ActiveChallenge = {
-        ...challenge,
+      const resetStoredChallenge: StoredChallengeData = {
+        ...storedChallenge,
         currentDay: 1,
         completedDays: [],
         completionRecords: [],
@@ -120,33 +153,34 @@ export function useChallenge() {
         startDate: today,
       };
 
-      const newChallenges = [...prevChallenges];
-      newChallenges[challengeIndex] = resetChallenge;
+      const newStoredChallenges = [...prevStoredChallenges];
+      newStoredChallenges[challengeIndex] = resetStoredChallenge;
       
-      localStorage.setItem("activeChallenges", JSON.stringify(newChallenges));
-      return newChallenges;
+      localStorage.setItem("activeChallenges", JSON.stringify(newStoredChallenges));
+      return newStoredChallenges;
     });
   };
 
   const removeChallenge = (challengeId: number) => {
-    setActiveChallenges(prevChallenges => {
-      const newChallenges = prevChallenges.filter(ac => ac.challenge.id !== challengeId);
-      localStorage.setItem("activeChallenges", JSON.stringify(newChallenges));
-      return newChallenges;
+    setStoredChallenges(prevStoredChallenges => {
+      const newStoredChallenges = prevStoredChallenges.filter(sc => sc.challengeId !== challengeId);
+      localStorage.setItem("activeChallenges", JSON.stringify(newStoredChallenges));
+      return newStoredChallenges;
     });
   };
 
   const getChallengeProgress = (challengeId: number) => {
-    const challenge = activeChallenges.find(ac => ac.challenge.id === challengeId);
+    const storedChallenge = storedChallenges.find(sc => sc.challengeId === challengeId);
+    if (!storedChallenge) return 0;
+    
+    const challenge = getChallengeById(challengeId);
     if (!challenge) return 0;
-    return (challenge.completedDays.length / challenge.challenge.duration) * 100;
-  };
-
-  const getActiveChallenge = (challengeId: number) => {
-    return activeChallenges.find(ac => ac.challenge.id === challengeId);
+    
+    return (storedChallenge.completedDays.length / challenge.duration) * 100;
   };
 
   // For backward compatibility - returns the first active challenge
+  const activeChallenges = getActiveChallenges();
   const selectedChallenge = activeChallenges.length > 0 ? activeChallenges[0].challenge : null;
   const currentDay = activeChallenges.length > 0 ? activeChallenges[0].currentDay : 1;
   const completedDays = activeChallenges.length > 0 ? activeChallenges[0].completedDays : [];

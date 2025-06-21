@@ -514,4 +514,14 @@ export const challenges: Challenge[] = [
       { day: 30, name: "Day 30", details: "1000 skips one workout", duration: 20 },
     ],
   },
-]; 
+];
+
+// Helper function to get challenge by ID
+export function getChallengeById(id: number): Challenge | undefined {
+  return challenges.find(challenge => challenge.id === id);
+}
+
+// Helper function to get all challenges
+export function getAllChallenges(): Challenge[] {
+  return challenges;
+} 

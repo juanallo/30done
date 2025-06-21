@@ -26,6 +26,16 @@ export interface CompletionRecord {
   date: string; // ISO date string (YYYY-MM-DD)
 }
 
+// New interface for storing only challenge ID and progress data
+export interface StoredChallengeData {
+  challengeId: number;
+  currentDay: number;
+  completedDays: number[];
+  completionRecords: CompletionRecord[];
+  streak: number;
+  startDate: string; // ISO date string when challenge was started
+}
+
 export interface ActiveChallenge {
   challenge: Challenge;
   currentDay: number;
