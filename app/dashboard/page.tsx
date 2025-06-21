@@ -14,19 +14,24 @@ import {
   ArrowLeft,
   Bell,
   CheckCircle,
+  Plus,
 } from "lucide-react";
 import { useChallenge } from "@/hooks/use-challenge";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { selectedChallenge, currentDay, completedDays, streak, progress, hasCompletedToday } = useChallenge();
+  const { 
+    activeChallenges, 
+    getChallengeProgress, 
+    hasCompletedToday 
+  } = useChallenge();
 
-  if (!selectedChallenge) {
+  if (activeChallenges.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600 mb-4">No challenge selected</p>
+          <p className="text-gray-600 mb-4">No active challenges</p>
           <button
             className="btn btn-primary"
             onClick={() => router.push("/challenges")}
@@ -59,118 +64,134 @@ export default function DashboardPage() {
           </div>
 
           <div className="mb-4">
-            <h1 className="text-2xl font-bold">{selectedChallenge.title}</h1>
+            <h1 className="text-2xl font-bold">My Challenges</h1>
+            <p className="text-gray-600 text-sm">
+              {activeChallenges.length} active challenge{activeChallenges.length !== 1 ? 's' : ''}
+            </p>
           </div>
 
-          {/* Progress Card */}
+          {/* Add Challenge Button */}
           <Card className="mb-4">
             <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-semibold">Progress</span>
-                <span className="text-sm text-gray-600">
-                  {completedDays.length}/{selectedChallenge.duration} days
-                </span>
-              </div>
-              <Progress value={progress} className="mb-2" />
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-1">
-                  <Flame className="h-4 w-4 text-orange-500" />
-                  <span>{streak} day streak</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Trophy className="h-4 w-4 text-yellow-500" />
-                  <span>{Math.round(progress)}% complete</span>
-                </div>
-              </div>
+              <button
+                onClick={() => router.push("/challenges")}
+                className="btn btn-outline w-full"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Another Challenge
+              </button>
             </CardContent>
           </Card>
         </div>
 
-        {/* Today's Workout */}
-        <div className="p-4">
-          <Card className="mb-4">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold">Today's Workout</h3>
-                <Badge>Day {currentDay}</Badge>
-              </div>
+        {/* Active Challenges List */}
+        <div className="p-4 space-y-4">
+          {activeChallenges.map((activeChallenge) => {
+            const progress = getChallengeProgress(activeChallenge.challenge.id);
+            const completedToday = hasCompletedToday(activeChallenge.challenge.id);
+            const currentExercise = activeChallenge.challenge.exercises.find(
+              ex => ex.day === activeChallenge.currentDay
+            );
 
-              {/* Today's completion status */}
-              {hasCompletedToday() && (
-                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-700">
-                    <CheckCircle className="h-4 w-4" />
-                    <span className="text-sm font-medium">Today's workout completed!</span>
+            return (
+              <Card key={activeChallenge.challenge.id} className="overflow-hidden">
+                <CardContent className="p-4">
+                  {/* Challenge Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg mb-1">
+                        {activeChallenge.challenge.title}
+                      </h3>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge
+                          variant={
+                            activeChallenge.challenge.difficulty === "Beginner"
+                              ? "secondary"
+                              : activeChallenge.challenge.difficulty === "Intermediate"
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {activeChallenge.challenge.difficulty}
+                        </Badge>
+                        <Badge variant="outline">
+                          Day {activeChallenge.currentDay} of {activeChallenge.challenge.duration}
+                        </Badge>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
 
-              {selectedChallenge.exercises[0] && (
-                <div className="mb-4">
-                  <h4 className="font-semibold mb-2">
-                    {selectedChallenge.exercises[0].name}
-                  </h4>
-                  <p className="text-gray-600 text-sm mb-3">
-                    {selectedChallenge.exercises[0].details}
-                  </p>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      {selectedChallenge.exercises[0].duration} minutes
-                    </span>
+                  {/* Progress */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium">Progress</span>
+                      <span className="text-sm text-gray-600">
+                        {activeChallenge.completedDays.length}/{activeChallenge.challenge.duration} days
+                      </span>
+                    </div>
+                    <Progress value={progress} className="mb-2" />
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-1">
+                        <Flame className="h-4 w-4 text-orange-500" />
+                        <span>{activeChallenge.streak} day streak</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Trophy className="h-4 w-4 text-yellow-500" />
+                        <span>{Math.round(progress)}% complete</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => router.push("/workout")}
-                  disabled={hasCompletedToday()}
-                  className={cn(
-                    "btn flex-1",
-                    hasCompletedToday() 
-                      ? "btn-disabled opacity-50 cursor-not-allowed" 
-                      : "btn-primary"
+                  {/* Today's Workout */}
+                  {currentExercise && (
+                    <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-sm">Today's Workout</h4>
+                        {completedToday && (
+                          <div className="flex items-center gap-1 text-green-600">
+                            <CheckCircle className="h-3 w-3" />
+                            <span className="text-xs">Completed</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <p className="text-gray-600 text-sm mb-2">
+                        {currentExercise.details}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <Clock className="h-3 w-3" />
+                        <span>{currentExercise.duration} minutes</span>
+                      </div>
+                    </div>
                   )}
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  {hasCompletedToday() ? "Completed Today" : "Start Workout"}
-                </button>
-                <button
-                  className="btn btn-ghost"
-                  onClick={() => router.push("/progress")}
-                >
-                  <Calendar className="h-4 w-4" />
-                </button>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-2 gap-4">
-            <Card>
-              <CardContent className="p-4 text-center">
-                <Target className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                <p className="font-semibold">View Progress</p>
-                <button
-                  className="btn btn-ghost btn-sm mt-2"
-                  onClick={() => router.push("/progress")}
-                >
-                  Open
-                </button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-4 text-center">
-                <Bell className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                <p className="font-semibold">Reminders</p>
-                <button className="btn btn-ghost btn-sm mt-2">
-                  Set Time
-                </button>
-              </CardContent>
-            </Card>
-          </div>
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => router.push(`/workout/${activeChallenge.challenge.id}`)}
+                      disabled={completedToday}
+                      className={cn(
+                        "btn flex-1",
+                        completedToday 
+                          ? "btn-disabled opacity-50 cursor-not-allowed" 
+                          : "btn-primary"
+                      )}
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      {completedToday ? "Completed" : "Start Workout"}
+                    </button>
+                    <button
+                      className="btn btn-ghost"
+                      onClick={() => router.push(`/progress/${activeChallenge.challenge.id}`)}
+                    >
+                      <Calendar className="h-4 w-4" />
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </div>
