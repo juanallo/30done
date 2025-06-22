@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, ArrowLeft } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
-import { cn } from "@/lib/utils";
+import { getChallengeInitials } from "@/lib/utils";
 import {
   Carousel,
   CarouselContent,
@@ -78,7 +78,8 @@ const WorkoutSkeleton = () => (
 export default function WorkoutPage({ params }: WorkoutPageProps) {
   const router = useRouter();
   const { challengeId } = use(params);
-  const { getActiveChallenge, markDayComplete, hasCompletedToday, isLoading } = useChallenge();
+  const { getActiveChallenge, markDayComplete, hasCompletedToday, isLoading } =
+    useChallenge();
 
   const activeChallenge = getActiveChallenge(challengeId);
 
@@ -135,7 +136,9 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-xl font-bold">Day {activeChallenge.currentDay} Workout</h1>
+            <h1 className="text-xl font-bold">
+              Day {activeChallenge.currentDay} Workout
+            </h1>
             <div></div>
           </div>
         </div>
@@ -145,7 +148,9 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
             <CardContent className="p-6">
               <div className="text-center mb-6">
                 <div className="w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-4xl">💪</span>
+                  <span className="text-4xl font-bold text-white">
+                    {getChallengeInitials(activeChallenge.challenge.title)}
+                  </span>
                 </div>
                 <h2 className="text-2xl font-bold mb-2">{exercise.name}</h2>
                 <p className="text-gray-600">{exercise.details}</p>
@@ -166,7 +171,7 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
 
               {/* Show completion status if already completed today */}
               {hasCompletedToday(challengeId) && (
-                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-center gap-2 text-green-700">
                     <CheckCircle className="h-4 w-4" />
                     <span className="text-sm font-medium">
@@ -176,78 +181,73 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
                 </div>
               )}
 
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    markDayComplete(challengeId, activeChallenge.currentDay);
-                    router.push("/dashboard");
-                  }}
-                  disabled={hasCompletedToday(challengeId)}
-                  className={cn(
-                    "btn w-full",
-                    hasCompletedToday(challengeId)
-                      ? "btn-disabled opacity-50 cursor-not-allowed"
-                      : "btn-success"
-                  )}
-                >
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  {hasCompletedToday(challengeId)
-                    ? "Already Completed Today"
-                    : "Mark as Complete"}
-                </button>
-                <button
-                  className="btn btn-outline w-full"
-                  onClick={() => router.push("/dashboard")}
-                >
-                  Skip for Today
-                </button>
-              </div>
+              {!hasCompletedToday(challengeId) && (
+                <div className="space-y-3">
+                  <button
+                    onClick={() => {
+                      markDayComplete(challengeId, activeChallenge.currentDay);
+                      router.push("/dashboard");
+                    }}
+                    className="btn w-full btn-success"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Mark as Complete
+                  </button>
+                  <button
+                    className="btn btn-outline w-full"
+                    onClick={() => router.push("/dashboard")}
+                  >
+                    Skip for Today
+                  </button>
+                </div>
+              )}
             </CardContent>
           </Card>
-          
+
           {/* Exercises Carousel */}
-          {activeChallenge.challenge.images && activeChallenge.challenge.images.length > 0 && (
-            <div className="mb-6 w-full">
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                className="w-full mx-auto"
-              >
-                <CarouselContent>
-                  {activeChallenge.challenge.images.map((image, index) => (
-                    <CarouselItem key={index}>
-                      <Card>
-                        <CardContent className="flex flex-col gap-2 aspect-square items-center justify-between p-4">
-                          <span className="font-semibold text-center">
-                            {image.title}
-                          </span>
-                         <div className="flex items-center justify-center h-full w-full">
-                         <Image
-                            src={image.src}
-                            alt={image.title}
-                            width={200}
-                            height={200}
-                            className="rounded-lg object-cover"
-                          />
-                         </div>
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                {activeChallenge.challenge.images.length > 1 && (
-                  <div className="flex items-center justify-center w-full gap-2 mt-2">
-                    <CarouselPrevious className="relative top-auto left-auto transform-none" />
-                    <CarouselNext className="relative top-auto right-auto transform-none" />
-                  </div>
-                )}
-              </Carousel>
-            </div>
-          )}
+          {activeChallenge.challenge.images &&
+            activeChallenge.challenge.images.length > 0 && (
+              <div className="mb-6 w-full">
+                <Carousel
+                  opts={{
+                    align: "start",
+                    loop: true,
+                  }}
+                  className="w-full mx-auto"
+                >
+                  <CarouselContent>
+                    {activeChallenge.challenge.images.map((image, index) => (
+                      <CarouselItem key={index}>
+                        <Card>
+                          <CardContent className="flex flex-col gap-2 aspect-square items-center justify-between p-4">
+                            <span className="font-semibold text-center">
+                              {image.title}
+                            </span>
+                            <div className="flex items-center justify-center h-full w-full">
+                              <Image
+                                src={image.src}
+                                alt={image.title}
+                                width={200}
+                                height={200}
+                                className="rounded-lg object-cover"
+                              />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  {activeChallenge.challenge.images.length > 1 && (
+                    <div className="flex items-center justify-center w-full gap-2 mt-2">
+                      <CarouselPrevious className="relative top-auto left-auto transform-none" />
+                      <CarouselNext className="relative top-auto right-auto transform-none" />
+                    </div>
+                  )}
+                </Carousel>
+              </div>
+            )}
         </div>
       </div>
     </div>
   );
-} 
+}

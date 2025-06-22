@@ -37,7 +37,7 @@ export default function HomePage() {
         >
           Get started
         </button>
-        <button className="btn btn-ghost w-full">Login with Google</button>
+        {/* <button className="btn btn-ghost w-full">Login with Google</button> */}
       </div>
     </div>
   );
