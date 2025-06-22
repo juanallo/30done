@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { PWAInstaller, IOSInstallPrompt } from '@/components/pwa-installer'
-import { PWADebug } from '@/components/pwa-debug'
+// import { PWADebug } from '@/components/pwa-debug'
 import { OfflineBanner } from '@/components/offline-banner'
 
 export const metadata: Metadata = {
@@ -54,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="night">
       <head>
         <meta name="application-name" content="30done" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -72,7 +72,7 @@ export default function RootLayout({
         {children}
         <PWAInstaller />
         <IOSInstallPrompt />
-        <PWADebug />
+        {/* <PWADebug /> */}
       </body>
     </html>
   )

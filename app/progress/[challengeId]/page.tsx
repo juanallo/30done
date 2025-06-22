@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, ArrowLeft, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useChallenge } from "@/hooks/useChallenge";
+import { NavigationHeader } from "@/components/navigation-header";
 
 interface ProgressPageProps {
   params: Promise<{
@@ -126,29 +127,17 @@ export default function ProgressPage({ params }: ProgressPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="bg-white p-4 rounded-b-3xl shadow-sm">
-          <div className="flex items-center justify-between mb-4 pt-4">
-            <button
-              className="btn btn-ghost btn-square"
-              onClick={() => router.push("/dashboard")}
-            >
-              <ArrowLeft className="h-6 w-6" />
-            </button>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Progress</h1>
-            <div></div>
-          </div>
-
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold">
-              {activeChallenge.challenge.title}
-            </h2>
-            <p className="text-gray-600 text-sm">
-              Day {activeChallenge.currentDay} of{" "}
-              {activeChallenge.challenge.duration}
-            </p>
-          </div>
-        </div>
+        <NavigationHeader
+          title="Progress"
+          backHref="/dashboard"
+          subtitle={
+            <div className="px-4">
+              <h2 className="text-lg font-semibold">
+                {activeChallenge.challenge.title}
+              </h2>
+            </div>
+          }
+        />
 
         {/* Progress Grid */}
         <div className="p-4">

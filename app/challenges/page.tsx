@@ -4,18 +4,24 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Calendar, Clock, RotateCcw, Trash2 } from "lucide-react";
-import { challenges } from "@/lib/data";
+import {
+  Calendar,
+  Clock,
+  RotateCcw,
+  Trash2,
+} from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
+import { challenges } from "@/lib/data";
+import { NavigationHeader } from "@/components/navigation-header";
 
 export default function ChallengesPage() {
   const router = useRouter();
   const {
     activeChallenges,
-    getChallengeProgress,
     startChallenge,
     resetChallenge,
     removeChallenge,
+    getChallengeProgress,
     isLoading,
   } = useChallenge();
 
@@ -36,272 +42,238 @@ export default function ChallengesPage() {
     removeChallenge(challengeId);
   };
 
-  const difficultyOrder = {
-    Beginner: 0,
-    Intermediate: 1,
-    Advanced: 2,
-    Varies: 3,
-  };
+  // Filter out challenges that are already active
+  const availableChallenges = challenges.filter(
+    (challenge) =>
+      !activeChallenges.some(
+        (activeChallenge) => activeChallenge.challenge.id === challenge.id
+      )
+  );
 
-  const availableChallenges = challenges
-    .filter(
-      (challenge) =>
-        !activeChallenges.some((ac) => ac.challenge.id === challenge.id)
-    )
-    .sort(
-      (a, b) =>
-        (difficultyOrder[a.difficulty as keyof typeof difficultyOrder] ?? 99) -
-        (difficultyOrder[b.difficulty as keyof typeof difficultyOrder] ?? 99)
-    );
-  // Loading skeleton component
   const LoadingSkeleton = () => (
     <div className="space-y-4">
-      <div className="mb-6">
-        <Skeleton className="h-6 w-32 mb-3" />
-        <div className="space-y-4">
-          {[1, 2].map((i) => (
-            <Card key={i} className="overflow-hidden">
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <Skeleton className="h-6 w-40" />
-                      <Skeleton className="h-5 w-20" />
-                    </div>
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-3/4" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 mb-3">
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-4 w-20" />
-                </div>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-4 w-8" />
-                  </div>
-                  <Skeleton className="h-2 w-full rounded-full" />
-                </div>
-                <div className="flex gap-2">
-                  <Skeleton className="h-10 flex-1" />
-                  <Skeleton className="h-10 w-10" />
-                  <Skeleton className="h-10 w-10" />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      {Array.from({ length: 3 }, (_, i) => (
+        <Card key={i} className="overflow-hidden">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-3">
+              <div className="flex-1">
+                <Skeleton className="h-6 w-48 mb-2" />
+                <Skeleton className="h-4 w-64 mb-2" />
+              </div>
+              <Skeleton className="h-6 w-20 ml-2" />
+            </div>
+            <div className="flex items-center gap-4 mb-3">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-16" />
+            </div>
+            <div className="flex gap-2">
+              <Skeleton className="h-10 flex-1" />
+              <Skeleton className="h-10 w-10" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center mb-6 pt-4">
-          <button
-            className="btn btn-ghost btn-square"
-            onClick={() => router.push("/")}
-          >
-            <ArrowLeft className="h-6 w-6" />
-          </button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            Choose Your Challenge
-          </h1>
-        </div>
+        <NavigationHeader title="Choose Your Challenge" backHref="/" />
 
-        {isLoading ? (
-          <LoadingSkeleton />
-        ) : (
-          <div className="space-y-4">
-            {/* Active Challenges Section */}
-            {activeChallenges.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold mb-3 text-primary flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Active Challenges ({activeChallenges.length})
+        <div className="p-4">
+          {isLoading ? (
+            <LoadingSkeleton />
+          ) : (
+            <div className="space-y-4">
+              {/* Active Challenges Section */}
+              {activeChallenges.length > 0 && (
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold mb-3 text-primary flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Active Challenges ({activeChallenges.length})
+                  </h2>
+                  <div className="space-y-4">
+                    {activeChallenges.map((activeChallenge) => {
+                      const progress = getChallengeProgress(
+                        activeChallenge.challenge.id
+                      );
+                      return (
+                        <Card
+                          key={activeChallenge.challenge.id}
+                          className="overflow-hidden"
+                        >
+                          <CardContent className="p-6">
+                            <div className="flex justify-between items-center mb-3">
+                              <div className="flex-1">
+                                <div className="flex items-start justify-between">
+                                  <h3 className="font-bold text-lg mb-1 text-gray-800">
+                                    {activeChallenge.challenge.title}
+                                  </h3>
+                                  <Badge
+                                    variant={
+                                      activeChallenge.challenge.difficulty ===
+                                      "Beginner"
+                                        ? "secondary"
+                                        : activeChallenge.challenge
+                                            .difficulty === "Intermediate"
+                                        ? "default"
+                                        : "destructive"
+                                    }
+                                    className="ml-2 shrink-0"
+                                  >
+                                    {activeChallenge.challenge.difficulty}
+                                  </Badge>
+                                </div>
+                                <p className="text-gray-600 text-sm mb-2">
+                                  {activeChallenge.challenge.description}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-4 w-4" />
+                                <span>
+                                  Day {activeChallenge.currentDay} of{" "}
+                                  {activeChallenge.challenge.duration}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-4 w-4" />
+                                <span>
+                                  {activeChallenge.challenge.estimatedTime}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Progress Bar */}
+                            <div className="mb-4">
+                              <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span>{Math.round(progress)}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="bg-primary h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
+                                  style={{ width: `${progress}%` }}
+                                ></div>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() =>
+                                  handleContinueChallenge(
+                                    activeChallenge.challenge.id
+                                  )
+                                }
+                                className="btn btn-primary flex-1"
+                              >
+                                Continue Challenge
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleResetChallenge(
+                                    activeChallenge.challenge.id
+                                  )
+                                }
+                                className="btn btn-ghost btn-square"
+                                title="Reset Challenge"
+                              >
+                                <RotateCcw className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleRemoveChallenge(
+                                    activeChallenge.challenge.id
+                                  )
+                                }
+                                className="btn btn-ghost btn-square text-red-500"
+                                title="Remove Challenge"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Available Challenges Section */}
+              <div>
+                <h2 className="text-lg font-semibold mb-3">
+                  {activeChallenges.length > 0
+                    ? "Other Challenges"
+                    : "Available Challenges"}
                 </h2>
                 <div className="space-y-4">
-                  {activeChallenges.map((activeChallenge) => {
-                    const progress = getChallengeProgress(
-                      activeChallenge.challenge.id
-                    );
-                    return (
-                      <Card
-                        key={activeChallenge.challenge.id}
-                        className="overflow-hidden"
-                      >
-                        <CardContent className="p-6">
-                          <div className="flex justify-between items-center mb-3">
-                            <div className="flex-1">
-                              <div className="flex items-start justify-between">
-                                <h3 className="font-bold text-lg mb-1 text-gray-800">
-                                  {activeChallenge.challenge.title}
-                                </h3>
-                                <Badge
-                                  variant={
-                                    activeChallenge.challenge.difficulty ===
-                                    "Beginner"
-                                      ? "secondary"
-                                      : activeChallenge.challenge.difficulty ===
-                                        "Intermediate"
-                                      ? "default"
-                                      : "destructive"
-                                  }
-                                  className="ml-2 shrink-0"
-                                >
-                                  {activeChallenge.challenge.difficulty}
-                                </Badge>
-                              </div>
-                              <p className="text-gray-600 text-sm mb-2">
-                                {activeChallenge.challenge.description}
-                              </p>
+                  {availableChallenges.map((challenge) => (
+                    <Card key={challenge.id} className="overflow-hidden">
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-center mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between">
+                              <h3 className="font-bold text-lg mb-1">
+                                {challenge.title}
+                              </h3>
+                              <Badge
+                                variant={
+                                  challenge.difficulty === "Beginner"
+                                    ? "secondary"
+                                    : challenge.difficulty === "Intermediate"
+                                    ? "default"
+                                    : "destructive"
+                                }
+                                className="ml-2 shrink-0"
+                              >
+                                {challenge.difficulty}
+                              </Badge>
                             </div>
+                            <p className="text-gray-600 text-sm mb-2">
+                              {challenge.description}
+                            </p>
                           </div>
+                        </div>
 
-                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
-                              <span>
-                                Day {activeChallenge.currentDay} of{" "}
-                                {activeChallenge.challenge.duration}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              <span>
-                                {activeChallenge.challenge.estimatedTime}
-                              </span>
-                            </div>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" />
+                            <span>{challenge.duration} days</span>
                           </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>{challenge.estimatedTime}</span>
+                          </div>
+                        </div>
 
-                          {/* Progress Bar */}
-                          <div className="mb-4">
-                            <div className="flex justify-between text-sm text-gray-600 mb-1">
-                              <span>Progress</span>
-                              <span>{Math.round(progress)}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-primary h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
-                                style={{ width: `${progress}%` }}
-                              ></div>
-                            </div>
-                          </div>
-
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() =>
-                                handleContinueChallenge(
-                                  activeChallenge.challenge.id
-                                )
-                              }
-                              className="btn btn-primary flex-1"
-                            >
-                              Continue Challenge
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleResetChallenge(
-                                  activeChallenge.challenge.id
-                                )
-                              }
-                              className="btn btn-ghost btn-square"
-                              title="Reset Challenge"
-                            >
-                              <RotateCcw className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleRemoveChallenge(
-                                  activeChallenge.challenge.id
-                                )
-                              }
-                              className="btn btn-ghost btn-square text-red-500"
-                              title="Remove Challenge"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
+                        <div className="flex gap-2 mt-4">
+                          <button
+                            onClick={() =>
+                              router.push(`/challenges/${challenge.id}`)
+                            }
+                            className="btn btn-outline flex-1 btn-accent"
+                          >
+                            View Details
+                          </button>
+                          <button
+                            onClick={() => handleStartChallenge(challenge)}
+                            className="btn btn-primary flex-1"
+                          >
+                            Start Challenge
+                          </button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </div>
-            )}
-
-            {/* Available Challenges Section */}
-            <div>
-              <h2 className="text-lg font-semibold mb-3">
-                {activeChallenges.length > 0
-                  ? "Other Challenges"
-                  : "Available Challenges"}
-              </h2>
-              <div className="space-y-4">
-                {availableChallenges.map((challenge) => (
-                  <Card key={challenge.id} className="overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-center mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between">
-                            <h3 className="font-bold text-lg mb-1">
-                              {challenge.title}
-                            </h3>
-                            <Badge
-                              variant={
-                                challenge.difficulty === "Beginner"
-                                  ? "secondary"
-                                  : challenge.difficulty === "Intermediate"
-                                  ? "default"
-                                  : "destructive"
-                              }
-                              className="ml-2 shrink-0"
-                            >
-                              {challenge.difficulty}
-                            </Badge>
-                          </div>
-                          <p className="text-gray-600 text-sm mb-2">
-                            {challenge.description}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{challenge.duration} days</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>{challenge.estimatedTime}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2 mt-4">
-                        <button
-                          onClick={() =>
-                            router.push(`/challenges/${challenge.id}`)
-                          }
-                          className="btn btn-outline flex-1 btn-accent"
-                        >
-                          View Details
-                        </button>
-                        <button
-                          onClick={() => handleStartChallenge(challenge)}
-                          className="btn btn-primary flex-1"
-                        >
-                          Start Challenge
-                        </button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

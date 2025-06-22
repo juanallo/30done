@@ -15,6 +15,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
+import { NavigationHeader } from "@/components/navigation-header";
 
 // Loading skeleton component
 const DashboardSkeleton = () => (
@@ -151,28 +152,19 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="bg-white p-4 shadow-sm">
-          <div className="flex items-center mb-4 pt-4">
-            <button
-              className="btn btn-ghost btn-square"
-              onClick={() => router.push("/challenges")}
-            >
-              <ArrowLeft className="h-6 w-6" />
-            </button>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              My Challenges
-            </h1>
-          </div>
-
-          <p className="text-gray-600 text-sm px-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            {activeChallenges.length} active challenge
-            {activeChallenges.length !== 1 ? "s" : ""}
-          </p>
-        </div>
+        <NavigationHeader
+          title="My Challenges"
+          backHref="/challenges"
+          subtitle={
+            <div className="text-gray-600 text-sm px-2 flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              {activeChallenges.length} active challenge
+              {activeChallenges.length !== 1 ? "s" : ""}
+            </div>
+          }
+        />
 
         {/* Active Challenges List */}
         <div className="p-4 space-y-4">

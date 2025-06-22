@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, ArrowLeft } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
 import { getChallengeInitials } from "@/lib/utils";
+import { NavigationHeader } from "@/components/navigation-header";
 import {
   Carousel,
   CarouselContent,
@@ -128,20 +129,10 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-md mx-auto">
-        <div className="bg-white p-1 shadow-sm">
-          <div className="flex items-center justify-between mb-4 pt-4">
-            <button
-              className="btn btn-ghost btn-square"
-              onClick={() => router.push("/dashboard")}
-            >
-              <ArrowLeft className="h-6 w-6" />
-            </button>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Day {activeChallenge.currentDay} Workout
-            </h1>
-            <div></div>
-          </div>
-        </div>
+        <NavigationHeader
+          title={`Day ${activeChallenge.currentDay} Workout`}
+          backHref="/dashboard"
+        />
 
         <div className="p-4">
           <Card className="mb-6">
@@ -194,7 +185,7 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
                     Mark as Complete
                   </button>
                   <button
-                    className="btn btn-outline w-full"
+                    className="btn btn-outline btn-accent w-full"
                     onClick={() => router.push("/dashboard")}
                   >
                     Skip for Today
