@@ -97,7 +97,7 @@ export default function ChallengesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
       <div className="max-w-md mx-auto">
         <div className="flex items-center mb-6 pt-4">
           <button
@@ -106,7 +106,9 @@ export default function ChallengesPage() {
           >
             <ArrowLeft className="h-6 w-6" />
           </button>
-          <h1 className="text-2xl font-bold">Challenges</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            Choose Your Challenge
+          </h1>
         </div>
 
         {isLoading ? (
@@ -116,7 +118,8 @@ export default function ChallengesPage() {
             {/* Active Challenges Section */}
             {activeChallenges.length > 0 && (
               <div className="mb-6">
-                <h2 className="text-lg font-semibold mb-3 text-primary">
+                <h2 className="text-lg font-semibold mb-3 text-primary flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   Active Challenges ({activeChallenges.length})
                 </h2>
                 <div className="space-y-4">
@@ -133,7 +136,7 @@ export default function ChallengesPage() {
                           <div className="flex justify-between items-center mb-3">
                             <div className="flex-1">
                               <div className="flex items-start justify-between">
-                                <h3 className="font-bold text-lg mb-1">
+                                <h3 className="font-bold text-lg mb-1 text-gray-800">
                                   {activeChallenge.challenge.title}
                                 </h3>
                                 <Badge
@@ -181,7 +184,7 @@ export default function ChallengesPage() {
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div
-                                className="bg-primary h-2 rounded-full transition-all duration-300"
+                                className="bg-primary h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
                                 style={{ width: `${progress}%` }}
                               ></div>
                             </div>
@@ -281,7 +284,7 @@ export default function ChallengesPage() {
                           onClick={() =>
                             router.push(`/challenges/${challenge.id}`)
                           }
-                          className="btn btn-outline flex-1"
+                          className="btn btn-outline flex-1 btn-accent"
                         >
                           View Details
                         </button>

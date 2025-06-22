@@ -693,7 +693,7 @@ export const challenges: Challenge[] = [
     duration: 30,
     description: "A 30-day challenge to build running endurance, progressing from 4 to 40 minutes. The plan includes a mix of running, walking, and sprinting to improve cardiovascular fitness.",
     estimatedTime: "4-40 min/day",
-    difficulty: "Varies",
+    difficulty: "Intermediate",
     exercises: [
       { day: 1, name: "Day 1", details: "4min run, 1min rest, repeat 2 times", duration: 10 },
       { day: 2, name: "Day 2", details: "5min run, 5min walk", duration: 10 },

@@ -8,16 +8,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   Calendar,
   Clock,
-  Flame,
   Trophy,
   Play,
   ArrowLeft,
-  Bell,
   CheckCircle,
   Plus,
 } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
-import { cn } from "@/lib/utils";
 
 // Loading skeleton component
 const DashboardSkeleton = () => (
@@ -116,6 +113,14 @@ export default function DashboardPage() {
     isLoading,
   } = useChallenge();
 
+  // Mock achievements - in a real app, these would come from user data
+  const mockAchievements = [
+    { type: "first_workout" as const },
+    { type: "streak" as const, value: 7 },
+    { type: "milestone" as const, value: 10 },
+    { type: "perfect_week" as const },
+  ];
+
   // Show loading skeleton while data is being loaded
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -123,11 +128,19 @@ export default function DashboardPage() {
 
   if (activeChallenges.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">No active challenges</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center max-w-sm mx-auto p-6">
+          <div className="w-24 h-24 gradient-animated rounded-full flex items-center justify-center mx-auto mb-6">
+            <Trophy className="h-12 w-12 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Ready to Start?
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Choose your first challenge and begin your fitness journey!
+          </p>
           <button
-            className="btn btn-primary"
+            className="btn btn-primary gradient-success hover:scale-105 transition-transform shadow-lg"
             onClick={() => router.push("/challenges")}
           >
             Choose a Challenge
@@ -149,10 +162,13 @@ export default function DashboardPage() {
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-2xl font-bold">My Challenges</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              My Challenges
+            </h1>
           </div>
 
-          <p className="text-gray-600 text-sm px-2">
+          <p className="text-gray-600 text-sm px-2 flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             {activeChallenges.length} active challenge
             {activeChallenges.length !== 1 ? "s" : ""}
           </p>
@@ -194,7 +210,7 @@ export default function DashboardPage() {
                         >
                           {activeChallenge.challenge.difficulty}
                         </Badge>
-                        <Badge variant="outline">
+                        <Badge variant="outline" className="text-blue-700">
                           Day {activeChallenge.currentDay} of{" "}
                           {activeChallenge.challenge.duration}
                         </Badge>
@@ -202,50 +218,54 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  {/* Progress */}
+                  {/* Enhanced Progress Section */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Progress</span>
-                      <span className="text-sm text-gray-600">
-                        {activeChallenge.completedDays.length}/
-                        {activeChallenge.challenge.duration} days
+                      <span className="text-sm text-gray-600">Progress</span>
+                      <span className="text-sm font-semibold">
+                        {Math.round(progress)}%
                       </span>
                     </div>
-                    <Progress value={progress} className="mb-2" />
-                    <div className="flex items-center gap-4 text-sm">
+                    <Progress value={progress} className="h-3 bg-gray-200 " />
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
                       <div className="flex items-center gap-1">
-                        <Flame className="h-4 w-4 text-orange-500" />
-                        <span>{activeChallenge.streak} day streak</span>
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Day {activeChallenge.currentDay} of{" "}
+                          {activeChallenge.challenge.duration}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Trophy className="h-4 w-4 text-yellow-500" />
-                        <span>{Math.round(progress)}% complete</span>
+                        <Clock className="h-4 w-4" />
+                        <span>{activeChallenge.challenge.estimatedTime}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Today's Workout */}
+                  {/* Today's Workout with enhanced styling */}
                   {currentExercise && (
-                    <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="mb-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-sm">
+                        <span className="text-sm font-medium text-gray-700">
                           Today's Workout
-                        </h4>
+                        </span>
                         {completedToday && (
                           <div className="flex items-center gap-1 text-green-600">
-                            <CheckCircle className="h-3 w-3" />
-                            <span className="text-xs">Completed</span>
+                            <CheckCircle className="h-4 w-4" />
+                            <span className="text-xs font-medium">
+                              Completed!
+                            </span>
                           </div>
                         )}
                       </div>
-
-                      <p className="text-gray-600 text-sm mb-2">
-                        {currentExercise.details}
+                      <p className="text-sm text-gray-800 font-medium mb-2">
+                        {currentExercise.name}
                       </p>
-
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
-                        <Clock className="h-3 w-3" />
-                        <span>{currentExercise.duration} minutes</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm text-gray-600">
+                          {currentExercise.details}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -256,19 +276,13 @@ export default function DashboardPage() {
                       onClick={() =>
                         router.push(`/workout/${activeChallenge.challenge.id}`)
                       }
-                      disabled={completedToday}
-                      className={cn(
-                        "btn flex-1",
-                        completedToday
-                          ? "btn-disabled opacity-50 cursor-not-allowed"
-                          : "btn-primary"
-                      )}
+                      className="btn btn-primary flex-1"
                     >
                       <Play className="h-4 w-4 mr-2" />
-                      {completedToday ? "Completed" : "Start Workout"}
+                      {completedToday ? "View Workout" : "Start Workout"}
                     </button>
                     <button
-                      className="btn btn-ghost"
+                      className="btn btn-ghost btn-square"
                       onClick={() =>
                         router.push(`/progress/${activeChallenge.challenge.id}`)
                       }

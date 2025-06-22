@@ -46,7 +46,7 @@ export default function ChallengeDetailsPage() {
           >
             <ArrowLeft className="h-6 w-6" />
           </button>
-          <h1 className="text-2xl font-bold">{challenge.title}</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">{challenge.title}</h1>
         </div>
 
         <Card className="mb-6">

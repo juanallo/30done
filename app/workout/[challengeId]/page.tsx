@@ -126,7 +126,7 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-md mx-auto">
         <div className="bg-white p-1 shadow-sm">
           <div className="flex items-center justify-between mb-4 pt-4">
@@ -136,7 +136,7 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Day {activeChallenge.currentDay} Workout
             </h1>
             <div></div>
@@ -147,13 +147,13 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
           <Card className="mb-6">
             <CardContent className="p-6">
               <div className="text-center mb-6">
-                <div className="w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-4xl font-bold text-white">
+                <div className="w-32 h-32 gradient-animated rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <span className="text-4xl font-bold text-white drop-shadow-lg">
                     {getChallengeInitials(activeChallenge.challenge.title)}
                   </span>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">{exercise.name}</h2>
-                <p className="text-gray-600">{exercise.details}</p>
+                <h2 className="text-2xl font-bold mb-2 text-gray-800">{exercise.name}</h2>
+                <p className="text-gray-600 font-medium">{exercise.details}</p>
               </div>
 
               <div className="space-y-4 mb-6">
@@ -171,11 +171,11 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
 
               {/* Show completion status if already completed today */}
               {hasCompletedToday(challengeId) && (
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-700">
-                    <CheckCircle className="h-4 w-4" />
+                <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-3 text-green-700">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
                     <span className="text-sm font-medium">
-                      Today's workout already completed!
+                      Today's workout completed! You're on fire!
                     </span>
                   </div>
                 </div>
