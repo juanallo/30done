@@ -7,7 +7,7 @@ export default function HomePage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900  to-slate-950 flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 flex flex-col items-center justify-center p-6 text-white relative overflow-hidden flex-1">
       {/* Main illustration area */}
       <div className="mb-8 relative">
         <Image

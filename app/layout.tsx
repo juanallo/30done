@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { PWAInstaller, IOSInstallPrompt } from '@/components/pwa-installer'
 import { PWADebug } from '@/components/pwa-debug'
+import { OfflineBanner } from '@/components/offline-banner'
 
 export const metadata: Metadata = {
   title: '30done - 30-Day Fitness Challenges',
@@ -67,7 +68,8 @@ export default function RootLayout({
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#3b82f6" />
       </head>
-      <body>
+      <body className="border-box h-full flex flex-col min-h-screen ">
+        <OfflineBanner />
         {children}
         <PWAInstaller />
         <IOSInstallPrompt />

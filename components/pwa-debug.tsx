@@ -7,7 +7,7 @@ import { RefreshCw, Trash2, Eye, X } from 'lucide-react'
 
 export function PWADebug() {
   const [debugInfo, setDebugInfo] = useState<any>({})
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
 
   // Only show in development mode
   if (process.env.NODE_ENV !== 'development') {
