@@ -7,7 +7,6 @@ import { OfflineBanner } from '@/components/offline-banner'
 export const metadata: Metadata = {
   title: '30done - 30-Day Fitness Challenges',
   description: 'Complete 30-day fitness challenges and build lasting habits with our streak-based tracking system.',
-  generator: 'v0.dev',
   manifest: '/manifest.json',
   icons: {
     icon: [
@@ -46,7 +45,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#3b82f6',
+  themeColor: '#1b1a44',
 }
 
 export default function RootLayout({
@@ -64,9 +63,9 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="msapplication-TileColor" content="#3b82f6" />
+        <meta name="msapplication-TileColor" content="##1b1a44" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#3b82f6" />
+        <meta name="theme-color" content="#1b1a44" />
       </head>
       <body className="border-box h-full flex flex-col min-h-screen ">
         <OfflineBanner />
