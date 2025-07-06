@@ -47,7 +47,18 @@ export function useChallenge() {
   };
 
   const getTodayDate = () => {
-    return new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Use user's local timezone instead of UTC
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`; // YYYY-MM-DD format in user's timezone
+  };
+
+  const isNewDay = (lastCompletionDate: string | null) => {
+    if (!lastCompletionDate) return true;
+    const today = getTodayDate();
+    return lastCompletionDate !== today;
   };
 
   const hasCompletedToday = (challengeId: string) => {
