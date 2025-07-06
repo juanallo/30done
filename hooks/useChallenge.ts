@@ -92,9 +92,23 @@ export function useChallenge() {
         }
       }
 
-      // Update current day
+      // Update current day - should be the next consecutive day they need to complete
       const challenge = getChallengeById(challengeId);
-      const nextDay = challenge ? Math.min(day + 1, challenge.duration) : day + 1;
+      let nextDay = storedChallenge.currentDay; // Keep current day by default
+      
+      if (challenge) {
+        // Find the next day they need to complete (first day not completed)
+        for (let i = 1; i <= challenge.duration; i++) {
+          if (!newCompleted.includes(i)) {
+            nextDay = i;
+            break;
+          }
+        }
+        // If all days are completed, set to the last day + 1 or duration
+        if (newCompleted.length === challenge.duration) {
+          nextDay = challenge.duration;
+        }
+      }
 
       const updatedStoredChallenge: StoredChallengeData = {
         ...storedChallenge,
