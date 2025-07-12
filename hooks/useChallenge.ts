@@ -47,7 +47,18 @@ export function useChallenge() {
   };
 
   const getTodayDate = () => {
-    return new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Use user's local timezone instead of UTC
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`; // YYYY-MM-DD format in user's timezone
+  };
+
+  const isNewDay = (lastCompletionDate: string | null) => {
+    if (!lastCompletionDate) return true;
+    const today = getTodayDate();
+    return lastCompletionDate !== today;
   };
 
   const hasCompletedToday = (challengeId: string) => {
@@ -92,9 +103,23 @@ export function useChallenge() {
         }
       }
 
-      // Update current day
+      // Update current day - should be the next consecutive day they need to complete
       const challenge = getChallengeById(challengeId);
-      const nextDay = challenge ? Math.min(day + 1, challenge.duration) : day + 1;
+      let nextDay = storedChallenge.currentDay; // Keep current day by default
+      
+      if (challenge) {
+        // Find the next day they need to complete (first day not completed)
+        for (let i = 1; i <= challenge.duration; i++) {
+          if (!newCompleted.includes(i)) {
+            nextDay = i;
+            break;
+          }
+        }
+        // If all days are completed, set to the last day + 1 or duration
+        if (newCompleted.length === challenge.duration) {
+          nextDay = challenge.duration;
+        }
+      }
 
       const updatedStoredChallenge: StoredChallengeData = {
         ...storedChallenge,
