@@ -210,17 +210,17 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
                     {activeChallenge.challenge.images.map((image, index) => (
                       <CarouselItem key={index}>
                         <Card>
-                          <CardContent className="flex flex-col gap-2 aspect-square items-center justify-between p-4">
+                          <CardContent className="flex flex-col gap-3 p-4">
                             <span className="font-semibold text-center">
                               {image.title}
                             </span>
-                            <div className="flex items-center justify-center h-full w-full">
+                            <div className="flex w-full items-center justify-center">
                               <Image
                                 src={image.src}
                                 alt={image.title}
-                                width={200}
-                                height={200}
-                                className="rounded-lg object-cover"
+                                width={512}
+                                height={512}
+                                className="h-auto max-h-64 w-auto max-w-full rounded-lg object-contain"
                               />
                             </div>
                           </CardContent>
