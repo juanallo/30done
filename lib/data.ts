@@ -663,7 +663,10 @@ export const challenges: Challenge[] = [
     description: "A 30-day challenge to master the hollow hold and superman hold, building a rock-solid core by alternating between two foundational gymnastic exercises.",
     estimatedTime: "< 5 min/day",
     difficulty: "Intermediate",
-    images: [{ src: challengeAsset("superman-hold.gif"), title: "Superman hold" }, { src: challengeAsset("hollow-hold.gif"), title: "Hollow hold" }],
+    images: [
+      { src: challengeAsset("superman-hold.gif"), title: "Superman hold" },
+      { src: challengeAsset("hollow-hold.gif"), title: "Hollow hold" },
+    ],
     exercises: [
       { day: 1, name: "Day 1", details: "20 seconds hollow hold", duration: 1 },
       { day: 2, name: "Day 2", details: "20 seconds superman hold", duration: 1 },
