@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Challenge, ActiveChallenge, CompletionRecord, StoredChallengeData } from "@/lib/types";
 import { getChallengeById } from "@/lib/data";
+import { computeCalendarStreakFromRecords } from "@/lib/streak";
 
 export function useChallenge() {
   const [storedChallenges, setStoredChallenges] = useState<StoredChallengeData[]>([]);
@@ -11,8 +12,13 @@ export function useChallenge() {
     const storedChallengesData = localStorage.getItem("activeChallenges");
     if (storedChallengesData) {
       try {
-        const parsedData = JSON.parse(storedChallengesData);
-        setStoredChallenges(parsedData);
+        const parsedData: StoredChallengeData[] = JSON.parse(storedChallengesData);
+        const migrated = parsedData.map((sc) => ({
+          ...sc,
+          streak: computeCalendarStreakFromRecords(sc.completionRecords),
+        }));
+        setStoredChallenges(migrated);
+        localStorage.setItem("activeChallenges", JSON.stringify(migrated));
       } catch (error) {
         console.error("Error parsing stored challenges:", error);
         setStoredChallenges([]);
@@ -93,15 +99,7 @@ export function useChallenge() {
       const newRecord: CompletionRecord = { day, date: today };
       const newRecords = [...storedChallenge.completionRecords, newRecord];
 
-      // Calculate streak
-      let currentStreak = 0;
-      for (let i = day; i >= 1; i--) {
-        if (newCompleted.includes(i)) {
-          currentStreak++;
-        } else {
-          break;
-        }
-      }
+      const currentStreak = computeCalendarStreakFromRecords(newRecords);
 
       // Update current day - should be the next consecutive day they need to complete
       const challenge = getChallengeById(challengeId);
