@@ -10,6 +10,7 @@ import { CheckCircle, ArrowLeft } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
 import { getChallengeInitials } from "@/lib/utils";
 import { NavigationHeader } from "@/components/navigation-header";
+import { WorkoutCompletionActions } from "@/components/workout-completion-actions";
 import {
   Carousel,
   CarouselContent,
@@ -173,24 +174,12 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
               )}
 
               {!hasCompletedToday(challengeId) && (
-                <div className="space-y-3">
-                  <button
-                    onClick={() => {
-                      markDayComplete(challengeId, activeChallenge.currentDay);
-                      router.push("/dashboard");
-                    }}
-                    className="btn w-full btn-success"
-                  >
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Mark as Complete
-                  </button>
-                  <button
-                    className="btn btn-outline btn-accent w-full"
-                    onClick={() => router.push("/dashboard")}
-                  >
-                    Skip for Today
-                  </button>
-                </div>
+                <WorkoutCompletionActions
+                  onMarkComplete={() => {
+                    markDayComplete(challengeId, activeChallenge.currentDay);
+                    router.push("/dashboard");
+                  }}
+                />
               )}
             </CardContent>
           </Card>
