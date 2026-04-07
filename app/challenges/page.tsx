@@ -13,6 +13,7 @@ import {
 import { useChallenge } from "@/hooks/useChallenge";
 import { challenges } from "@/lib/data";
 import { NavigationHeader } from "@/components/navigation-header";
+import { Button } from "@/components/ui/button";
 
 export default function ChallengesPage() {
   const router = useRouter();
@@ -114,7 +115,7 @@ export default function ChallengesPage() {
                                     variant={
                                       activeChallenge.challenge.difficulty ===
                                       "Beginner"
-                                        ? "secondary"
+                                        ? "outline"
                                         : activeChallenge.challenge
                                             .difficulty === "Intermediate"
                                         ? "default"
@@ -162,38 +163,45 @@ export default function ChallengesPage() {
                             </div>
 
                             <div className="flex gap-2">
-                              <button
+                              <Button
+                                type="button"
+                                variant="default"
+                                className="flex-1"
                                 onClick={() =>
                                   handleContinueChallenge(
                                     activeChallenge.challenge.id
                                   )
                                 }
-                                className="btn btn-primary flex-1"
                               >
                                 Continue Challenge
-                              </button>
-                              <button
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
                                 onClick={() =>
                                   handleResetChallenge(
                                     activeChallenge.challenge.id
                                   )
                                 }
-                                className="btn btn-ghost btn-square"
                                 title="Reset Challenge"
                               >
                                 <RotateCcw className="h-4 w-4" />
-                              </button>
-                              <button
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="text-red-500 hover:text-red-600"
                                 onClick={() =>
                                   handleRemoveChallenge(
                                     activeChallenge.challenge.id
                                   )
                                 }
-                                className="btn btn-ghost btn-square text-red-500"
                                 title="Remove Challenge"
                               >
                                 <Trash2 className="h-4 w-4" />
-                              </button>
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>
@@ -205,7 +213,7 @@ export default function ChallengesPage() {
 
               {/* Available Challenges Section */}
               <div>
-                <h2 className="text-lg font-semibold mb-3">
+                <h2 className="text-lg font-semibold mb-4 text-foreground">
                   {activeChallenges.length > 0
                     ? "Other Challenges"
                     : "Available Challenges"}
@@ -217,13 +225,13 @@ export default function ChallengesPage() {
                         <div className="flex justify-between items-center mb-3">
                           <div className="flex-1">
                             <div className="flex items-start justify-between">
-                              <h3 className="font-bold text-lg mb-1">
+                              <h3 className="font-bold text-lg mb-1 text-gray-800">
                                 {challenge.title}
                               </h3>
                               <Badge
                                 variant={
                                   challenge.difficulty === "Beginner"
-                                    ? "secondary"
+                                    ? "outline"
                                     : challenge.difficulty === "Intermediate"
                                     ? "default"
                                     : "destructive"
@@ -251,20 +259,24 @@ export default function ChallengesPage() {
                         </div>
 
                         <div className="flex gap-2 mt-4">
-                          <button
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="flex-1"
                             onClick={() =>
                               router.push(`/challenges/${challenge.id}`)
                             }
-                            className="btn btn-outline flex-1 btn-accent"
                           >
                             View Details
-                          </button>
-                          <button
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="default"
+                            className="flex-1"
                             onClick={() => handleStartChallenge(challenge)}
-                            className="btn btn-primary flex-1"
                           >
                             Start Challenge
-                          </button>
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>

@@ -1,4 +1,7 @@
-const CACHE_NAME = '30done-v1';
+// Keep ASSET_VERSION in sync with lib/challenge-assets.ts CHALLENGE_ASSETS_VERSION
+const ASSET_VERSION = '1.2.3';
+const CACHE_NAME = `30done-v${ASSET_VERSION}`;
+const v = (path) => `${path}?v=${ASSET_VERSION}`;
 const urlsToCache = [
   '/',
   '/offline',
@@ -7,19 +10,24 @@ const urlsToCache = [
   '/icon-192.png',
   '/icon-512.png',
   '/browserconfig.xml',
-  // Add challenge images
-  '/challenges/burpee.gif',
-  '/challenges/calf-raises.png',
-  '/challenges/high-knees.gif',
-  '/challenges/hollow-hold.png',
-  '/challenges/jump-rope.png',
-  '/challenges/lunges.png',
-  '/challenges/mountain-climbers.gif',
-  '/challenges/plank.png',
-  '/challenges/push-ups.png',
-  '/challenges/shoulder-tap.png',
-  '/challenges/side-lunges.png',
-  '/challenges/wall-sit.png',
+  // Challenge images (versioned for cache bust)
+  v('/challenges/calf-raises.png'),
+  v('/challenges/jump-rope.png'),
+  v('/challenges/lunges.png'),
+  v('/challenges/plank.png'),
+  v('/challenges/push-ups.png'),
+  v('/challenges/side-lunges.png'),
+  v('/challenges/wall-sit.png'),
+  v('/challenges/burpees-50-one-go.png'),
+  v('/challenges/ab-crunches.png'),
+  v('/challenges/ab-leg-raises.png'),
+  v('/challenges/tricep-dips.png'),
+  v('/challenges/squats.png'),
+  v('/challenges/walking-to-running.png'),
+  v('/challenges/glute-bridge.png'),
+  v('/challenges/handstand.png'),
+  v('/challenges/pull-ups.png'),
+  v('/challenges/stretching.png'),
 ];
 
 // Function to refresh cache

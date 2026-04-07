@@ -10,6 +10,7 @@ import { CheckCircle, ArrowLeft } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
 import { getChallengeInitials } from "@/lib/utils";
 import { NavigationHeader } from "@/components/navigation-header";
+import { WorkoutCompletionActions } from "@/components/workout-completion-actions";
 import {
   Carousel,
   CarouselContent,
@@ -173,24 +174,12 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
               )}
 
               {!hasCompletedToday(challengeId) && (
-                <div className="space-y-3">
-                  <button
-                    onClick={() => {
-                      markDayComplete(challengeId, activeChallenge.currentDay);
-                      router.push("/dashboard");
-                    }}
-                    className="btn w-full btn-success"
-                  >
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Mark as Complete
-                  </button>
-                  <button
-                    className="btn btn-outline btn-accent w-full"
-                    onClick={() => router.push("/dashboard")}
-                  >
-                    Skip for Today
-                  </button>
-                </div>
+                <WorkoutCompletionActions
+                  onMarkComplete={() => {
+                    markDayComplete(challengeId, activeChallenge.currentDay);
+                    router.push("/dashboard");
+                  }}
+                />
               )}
             </CardContent>
           </Card>
@@ -210,17 +199,17 @@ export default function WorkoutPage({ params }: WorkoutPageProps) {
                     {activeChallenge.challenge.images.map((image, index) => (
                       <CarouselItem key={index}>
                         <Card>
-                          <CardContent className="flex flex-col gap-2 aspect-square items-center justify-between p-4">
+                          <CardContent className="flex flex-col gap-3 p-4">
                             <span className="font-semibold text-center">
                               {image.title}
                             </span>
-                            <div className="flex items-center justify-center h-full w-full">
+                            <div className="flex w-full items-center justify-center">
                               <Image
                                 src={image.src}
                                 alt={image.title}
-                                width={200}
-                                height={200}
-                                className="rounded-lg object-cover"
+                                width={512}
+                                height={512}
+                                className="h-auto max-h-64 w-auto max-w-full rounded-lg object-contain"
                               />
                             </div>
                           </CardContent>
