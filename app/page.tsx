@@ -2,11 +2,21 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Flame, Trophy, Target, Zap } from "lucide-react";
 import { Motivation } from "@/components/motivation";
+import { useChallenge } from "@/hooks/useChallenge";
 
 export default function HomePage() {
   const router = useRouter();
+  const { activeChallenges, isLoading } = useChallenge();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (activeChallenges.length > 0) {
+      router.replace("/dashboard");
+    }
+  }, [isLoading, activeChallenges.length, router]);
 
   return (
     <div className="h-full bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 flex flex-col items-center justify-center p-6 text-white relative overflow-hidden flex-1">
