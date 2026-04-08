@@ -80,7 +80,7 @@ export default function ChallengesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-md mx-auto">
-        <NavigationHeader title="Choose Your Challenge" backHref="/" />
+        <NavigationHeader title="Choose Your Challenge" backHref="/" showBack={activeChallenges.length === 0} />
 
         <div className="p-4">
           {isLoading ? (
@@ -163,10 +163,9 @@ export default function ChallengesPage() {
                             </div>
 
                             <div className="flex gap-2">
-                              <Button
+                              <button
                                 type="button"
-                                variant="default"
-                                className="flex-1"
+                                className="btn btn-primary flex-1"
                                 onClick={() =>
                                   handleContinueChallenge(
                                     activeChallenge.challenge.id
@@ -174,7 +173,7 @@ export default function ChallengesPage() {
                                 }
                               >
                                 Continue Challenge
-                              </Button>
+                              </button>
                               <Button
                                 type="button"
                                 variant="ghost"
@@ -269,14 +268,13 @@ export default function ChallengesPage() {
                           >
                             View Details
                           </Button>
-                          <Button
+                          <button
                             type="button"
-                            variant="default"
-                            className="flex-1"
+                            className="btn btn-primary flex-1"
                             onClick={() => handleStartChallenge(challenge)}
                           >
                             Start Challenge
-                          </Button>
+                          </button>
                         </div>
                       </CardContent>
                     </Card>

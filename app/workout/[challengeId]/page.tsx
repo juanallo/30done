@@ -6,7 +6,7 @@ import { use } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CheckCircle, ArrowLeft } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useChallenge } from "@/hooks/useChallenge";
 import { getChallengeInitials } from "@/lib/utils";
 import { NavigationHeader } from "@/components/navigation-header";
